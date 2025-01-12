@@ -1,13 +1,12 @@
 package com.example.daymate.Navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.daymate.Authentication.SignInScreen
-import com.example.daymate.Authentication.SignUpScreen
+    import androidx.compose.runtime.Composable
+    import androidx.navigation.compose.NavHost
+    import androidx.navigation.compose.composable
+    import androidx.navigation.compose.rememberNavController
+    import com.example.daymate.Authentication.SignIn_Screen
+    import com.example.daymate.Authentication.SignUp_Screen
+    import com.example.daymate.User.User_homepage
 
 @Composable
 fun ScreenNavigation() {
@@ -15,12 +14,15 @@ fun ScreenNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screens.SignUpScreen.name
+        startDestination = "login"
     ) {
-        composable(Screens.SignUpScreen.name) { SignUpScreen(navController = navController) }
-        composable(Screens.SignInScreen.name) { SignInScreen(navController=navController) }
+        composable("login") { SignIn_Screen(navController) }
+        composable("signup") { SignUp_Screen(navController) }
+//        composable("home") { Admin_homepage(navController)  }
+//        composable(Screens.Canteen_admin_homepage.name) { Canteen_admin_homepage(navController)  }
+//        composable(Screens.Super_admin_homepage.name) { Super_admin_homepage(navController) }
+        composable("home") { User_homepage(navController)  }
 
-        // composable("super_admin_dashboard") {  }
     }
 
 }
