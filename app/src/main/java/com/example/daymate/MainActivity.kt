@@ -1,9 +1,11 @@
 package com.example.daymate
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.FloatingActionButton
@@ -19,19 +21,22 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.daymate.Class_Schedule.TimetableScreen
 import com.example.daymate.Navigation.ScreenNavigation
 import com.example.daymate.ui.theme.DayMateTheme
 import org.example.project.FloatButton
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DayMateTheme {
-                ScreenNavigation()
+                //ScreenNavigation()
                 //Animation()
-               // FloatButton()
+                // FloatButton()
+                TimetableScreen()
             }
         }
     }
@@ -42,14 +47,15 @@ fun Animation() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animate))
 
     val progress by animateLottieCompositionAsState(
-        composition=composition,
+        composition = composition,
         iterations = LottieConstants.IterateForever
     )
     LottieAnimation(
         composition = composition,
-        progress=progress,
-        modifier = Modifier.fillMaxWidth()
+        progress = progress,
+        modifier = Modifier
+            .fillMaxWidth()
             .height(300.dp)
     )
-    
+
 }
