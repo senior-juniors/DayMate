@@ -1,0 +1,94 @@
+{
+  "6th_semester": {
+    "CSE": {
+      "A1": [
+        {
+          "day": "Monday",
+          "schedule": [
+            {"subject": "CST302 (AN)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CST304 (VK)", "time": "2:00 PM - 3:00 PM", "location": "LT-6"},
+            {"subject": "HST302 (RS)", "time": "3:00 PM - 4:00 PM", "location": "LT-6"},
+            {"subject": "CST306 (GSY)", "time": "4:00 PM - 5:00 PM", "location": "LT-6"}
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "schedule": [
+            {"subject": "CST304 (VK)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CST302 (AN)", "time": "11:00 AM - 12:00 PM", "location": "LT-6"},
+            {"subject": "CST306 (GSY)", "time": "12:00 PM - 1:00 PM", "location": "LT-6"},
+            {"subject": "CSP302 (AN +SS)", "time": "3:00 PM - 5:00 PM", "location": "LAB-138"}
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "schedule": [
+            {"subject": "HST302 (RS)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "PROJECT CSD302", "time": "2:00 PM - 4:00 PM", "location": "--"}
+          ]
+        },
+        {
+          "day": "Thursday",
+          "schedule": [
+            {"subject": "CST304 (VK)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CSP304 (VK)", "time": "11:00 AM - 1:00 PM", "location": "CC"},
+            {"subject": "CST306 (GSY)", "time": "2:00 PM - 3:00 PM", "location": "LT-6"},
+            {"subject": "CST302 (AN)", "time": "3:00 PM - 4:00 PM", "location": "LT-6"}
+          ]
+        },
+        {
+          "day": "Friday",
+          "schedule": [
+            {"subject": "HSP302 (RS)", "time": "9:00 AM - 11:00 AM", "location": "LAB-305"},
+            {"subject": "CST302 (TUTE)(AN)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "PROJECT CSD302", "time": "2:00 PM - 4:00 PM", "location": "--"}
+          ]
+        }
+      ],
+      "A2": [
+        {
+          "day": "Monday",
+          "schedule": [
+            {"subject": "CST302 (AN)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CSP302 (AN +SS)", "time": "11:00 AM - 1:00 PM", "location": "LAB-137"},
+            {"subject": "CST304 (VK)", "time": "2:00 PM - 3:00 PM", "location": "LT-6"},
+            {"subject": "HST302 (RS)", "time": "3:00 PM - 4:00 PM", "location": "LT-6"},
+            {"subject": "CST306 (GSY)", "time": "4:00 PM - 5:00 PM", "location": "LT-6"}
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "schedule": [
+            {"subject": "CST304 (VK)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CST302 (AN)", "time": "11:00 AM - 12:00 PM", "location": "LT-6"},
+            {"subject": "CST306 (GSY)", "time": "12:00 PM - 1:00 PM", "location": "LT-6"}
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "schedule": [
+            {"subject": "HST302 (RS)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "CSP304 (VK)", "time": "11:00 AM - 1:00 PM", "location": "CC"},
+            {"subject": "PROJECT CSD302", "time": "2:00 PM - 4:00 PM", "location": "--"}
+          ]
+        },
+        {
+          "day": "Thursday",
+          "schedule": [
+            {"subject": "CST304 (VK)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "HSP302 (RS)", "time": "11:00 AM - 1:00 PM", "location": "LAB-305"},
+            {"subject": "CST306 (GSY)", "time": "2:00 PM - 3:00 PM", "location": "LT-6"},
+            {"subject": "CST302 (AN)", "time": "3:00 PM - 4:00 PM", "location": "LT-6"}
+          ]
+        },
+        {
+          "day": "Friday",
+          "schedule": [
+            {"subject": "CST302 (TUTE)(AN)", "time": "10:00 AM - 11:00 AM", "location": "LT-6"},
+            {"subject": "PROJECT CSD302", "time": "2:00 PM - 4:00 PM", "location": "--"}
+          ]
+        }
+      ]
+    }
+  }
+}

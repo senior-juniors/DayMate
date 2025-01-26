@@ -1,7 +1,5 @@
 package com.example.daymate.Class_Schedule
 
-import org.jetbrains.annotations.Async.Schedule
-
 data class Timetabledata(
     val day: String,
     val schedule: List<SubjectDetails>

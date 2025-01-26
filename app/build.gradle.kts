@@ -37,6 +37,13 @@ android {
     buildFeatures {
         compose = true
     }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src\\main\\assets", "src\\main\\assets")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -49,8 +56,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation ("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.material:material:1.7.6")
     implementation(libs.firebase.auth.ktx)
-    implementation ("androidx.navigation:navigation-compose:2.8.5")
+    implementation (libs.androidx.navigation.compose)
     implementation(libs.androidx.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -68,5 +77,15 @@ dependencies {
 
     //animations
     implementation ("com.airbnb.android:lottie-compose:6.1.0")
+
+    //Moshi  for json file calling
+    implementation("com.squareup.moshi:moshi:1.13.0") // Moshi for JSON parsing
+    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")// Moshi Kotlin adapter for using Kotlin data classes
+
+    implementation("com.squareup.moshi:moshi-kotlin-codegen:1.13.0")// If you're using Kotlin serialization (make sure you're using this if needed):
+    implementation ("com.squareup.moshi:moshi-adapters:1.13.0")
+
+    //livedata
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.6")
 
 }

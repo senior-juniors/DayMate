@@ -34,14 +34,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             DayMateTheme {
                 //ScreenNavigation()
-                //Animation()
+                Animation()
                 // FloatButton()
-                TimetableScreen()
+                //TimetableScreen()
             }
         }
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun Animation() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animate))

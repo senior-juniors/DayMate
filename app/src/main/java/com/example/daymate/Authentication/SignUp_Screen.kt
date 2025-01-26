@@ -82,7 +82,6 @@ fun SignUp_Screen(navController: NavController) {
 
 fun signUpUser(email: String, password: String, onResult: (Boolean) -> Unit) {
     val auth = FirebaseAuth.getInstance()
-
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             onResult(task.isSuccessful)
