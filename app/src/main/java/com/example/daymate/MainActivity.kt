@@ -34,9 +34,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             DayMateTheme {
                 //ScreenNavigation()
-                Animation()
+                //Animation()
                 // FloatButton()
-                //TimetableScreen()
+                TimetableScreen()
             }
         }
     }
