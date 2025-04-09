@@ -86,7 +86,7 @@ fun ClubCardGridSection(navController: NavHostController) {
     val gridItems = listOf(
         ClubItem(
             "Codebase",
-            R.drawable.codebase,
+            R.drawable.logo_img,
             Color(0xFFB1B2FF),
             Color(0xFFC1C2FF),
             Color(0xFFDADCFF)
@@ -107,14 +107,14 @@ fun ClubCardGridSection(navController: NavHostController) {
         ),
         ClubItem(
             "ARC Robotics",
-            R.drawable.arc,
+            R.drawable.kernel,
             Color(0xFFFF715B),
             Color(0xFFFF8A76),
             Color(0xFFFFB3A8)
         ),
         ClubItem(
             "Google Developer Group",
-            R.drawable.gdg,
+            R.drawable.cypher,
             Color(0xFFB1B2FF),
             Color(0xFFC1C2FF),
             Color(0xFFDADCFF)
@@ -126,7 +126,7 @@ fun ClubCardGridSection(navController: NavHostController) {
             Color(0xFFC1C2FF),
             Color(0xFFDADCFF)
         ),
-        ClubItem("Neon", R.drawable.neon, Color(0xFFFFDD95), Color(0xFFFFE4A8), Color(0xFFFFEDC2)),
+        ClubItem("Neon", R.drawable.inco, Color(0xFFFFDD95), Color(0xFFFFE4A8), Color(0xFFFFEDC2)),
         ClubItem(
             "Fit India",
             R.drawable.fitindia,
@@ -136,7 +136,7 @@ fun ClubCardGridSection(navController: NavHostController) {
         ),
         ClubItem(
             "Artive",
-            R.drawable.artive,
+            R.drawable.fitindia,
             Color(0xFFFF715B),
             Color(0xFFFF8A76),
             Color(0xFFFFB3A8)
@@ -148,7 +148,7 @@ fun ClubCardGridSection(navController: NavHostController) {
             Color(0xFFFF8A76),
             Color(0xFFFFB3A8)
         ),
-        ClubItem("QNS", R.drawable.qns, Color(0xFFFF715B), Color(0xFFFF8A76), Color(0xFFFFB3A8)),
+        ClubItem("QNS", R.drawable.logo_img, Color(0xFFFF715B), Color(0xFFFF8A76), Color(0xFFFFB3A8)),
         ClubItem(
             "Incognito",
             R.drawable.incognito,
@@ -158,7 +158,7 @@ fun ClubCardGridSection(navController: NavHostController) {
         ),
         ClubItem(
             "Team Green",
-            R.drawable.tgcc,
+            R.drawable.kernel,
             Color(0xFFFF715B),
             Color(0xFFFF8A76),
             Color(0xFFFFB3A8)
