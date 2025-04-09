@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -44,10 +45,14 @@ class MainActivity : ComponentActivity() {
                 //Animation()
                 // FloatButton()
                 //TimetableScreen()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val navController = rememberNavController()
+////                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+////
+////                    FloatButton(todoViewmodel)
+////                }
+//                AppNavGraph(navController)
 
-                    FloatButton(todoViewmodel)
-                }
+                AppNavigation(navController)
             }
         }
     }
