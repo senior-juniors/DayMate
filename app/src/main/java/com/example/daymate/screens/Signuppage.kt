@@ -1,4 +1,4 @@
-package com.example.daymate.Screens
+package com.example.daymate.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

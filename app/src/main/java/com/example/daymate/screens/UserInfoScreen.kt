@@ -1,6 +1,5 @@
-package com.example.daymate.Screens
+package com.example.daymate.screens
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas

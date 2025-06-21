@@ -1,6 +1,5 @@
-package com.example.daymate.Screens
+package com.example.daymate.screens
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells

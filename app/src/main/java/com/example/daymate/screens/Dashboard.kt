@@ -1,9 +1,12 @@
-package com.example.daymate.Screens
+package com.example.daymate.screens
 
+import android.content.Intent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -26,15 +29,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Divider
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,16 +51,22 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.daymate.Features.Feature
 import com.example.daymate.Features.standardQuadFromTo
 import com.example.daymate.R
 import com.example.daymate.auth.UserViewmodel
+import androidx.compose.material.ripple.rememberRipple
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -225,7 +234,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                             style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(16.dp)
                         )
-                        Divider(modifier = Modifier.padding(vertical = 8.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                         if (timetableList.isEmpty()) {
                             Text(
                                 "No classes today!",
@@ -284,6 +293,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
 
 @Composable
 fun DashboardGridSection() {
+    val context = LocalContext.current
     val gridItems = listOf(
         Feature(
             "Events",
@@ -304,7 +314,16 @@ fun DashboardGridSection() {
             R.drawable.enjoy_img,
             Color(0xFFAEE5D4),
             Color(0xFF98D7C2),
-            Color(0xFF77C6A8)
+            Color(0xFF77C6A8),
+            onClick = {
+                val driveUrl = "https://drive.google.com/drive/folders/1Ki5Q0oFkWZBjgQOJ1zPy6Qv1NDDTt5QF"
+                val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(driveUrl)).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
+
+
         ),
         Feature(
             "Canteen",
@@ -451,6 +470,12 @@ fun FeatureItem(
             .aspectRatio(1f)
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = LocalIndication.current // ✅ Material3 ripple from theme
+            ) {
+                feature.onClick()
+            }
     ) {
         with(this) {
             val width = constraints.maxWidth.toFloat()
@@ -530,5 +555,4 @@ fun FeatureItem(
         }
     }
 }
-
 

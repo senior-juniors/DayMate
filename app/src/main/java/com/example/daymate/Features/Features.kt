@@ -1,5 +1,6 @@
 package com.example.daymate.Features
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 data class Feature(
@@ -7,5 +8,6 @@ data class Feature(
     val iconId: Int,
     val lightColor: Color,
     val mediumColor: Color,
-    val darkColor: Color
+    val darkColor: Color,
+    val onClick: () -> Unit = {} // Optional click behavior
 )
