@@ -58,6 +58,7 @@ import com.example.daymate.Features.Feature
 import com.example.daymate.Features.standardQuadFromTo
 import com.example.daymate.R
 import com.example.daymate.auth.UserViewmodel
+import android.icu.util.Calendar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,9 +160,19 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
+                    val greeting = remember {
+                        val calendar = Calendar.getInstance()
+                        when (calendar.get(Calendar.HOUR_OF_DAY)) {
+                            in 0..11 -> "Good Morning!"
+                            in 12..16 -> "Good Afternoon!"
+                            else -> "Good Evening!"
+                        }
+                    }
+
                     Column {
                         Text(
-                            text = "Good Morning!",
+                            text = greeting,
                             style = MaterialTheme.typography.headlineSmall,
                             color = Color.White
                         )
@@ -209,10 +220,12 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                             )
                         }
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+//                    Spacer(modifier = Modifier.width(8.dp))
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
+
+
                 if (showSheet) {
                     ModalBottomSheet(
                         onDismissRequest = {showSheet=false},
@@ -330,6 +343,118 @@ fun DashboardGridSection() {
 }
 
 
+//@Composable
+//fun DashboardCard(
+//    icon: Int,
+//    text: String,
+//    background: Color = Color.White,
+//    textColor: Color = Color.Black,
+//    lightColor: Color,
+//    mediumColor: Color,
+//    darkColor: Color,
+//    onClick: () -> Unit
+//) {
+//    Row(
+//        modifier = Modifier
+//            .clickable { onClick() }
+//            .fillMaxWidth()
+//            .height(100.dp)
+//            .clip(RoundedCornerShape(16.dp))
+//            .background(background)
+//            .padding(8.dp),
+//        verticalAlignment = Alignment.CenterVertically
+//
+//    ) {
+//        // Wavy Background Section
+//        BoxWithConstraints(
+//            modifier = Modifier
+//                .padding(7.5.dp)
+//                .aspectRatio(1f)
+//                .clip(RoundedCornerShape(10.dp))
+//                .background(darkColor)
+//        ) {
+//            with(this) {
+//                val width = constraints.maxWidth.toFloat()
+//                val height = constraints.maxHeight.toFloat()
+//
+//                // Medium colored path
+//                val mediumColoredPoint1 = Offset(0f, height * 0.3f)
+//                val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
+//                val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
+//                val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
+//                val mediumColoredPoint5 = Offset(width * 1.4f, -height)
+//
+//                val mediumColoredPath = Path().apply {
+//                    moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
+//                    standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
+//                    standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
+//                    standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
+//                    standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
+//                    lineTo(width + 100f, height + 100f)
+//                    lineTo(-100f, height + 100f)
+//                    close()
+//                }
+//
+//                // Light colored path
+//                val lightPoint1 = Offset(0f, height * 0.35f)
+//                val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
+//                val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
+//                val lightPoint4 = Offset(width * 0.65f, height)
+//                val lightPoint5 = Offset(width * 1.4f, -height / 3f)
+//
+//                val lightColoredPath = Path().apply {
+//                    moveTo(lightPoint1.x, lightPoint1.y)
+//                    standardQuadFromTo(lightPoint1, lightPoint2)
+//                    standardQuadFromTo(lightPoint2, lightPoint3)
+//                    standardQuadFromTo(lightPoint3, lightPoint4)
+//                    standardQuadFromTo(lightPoint4, lightPoint5)
+//                    lineTo(width + 100f, height + 100f)
+//                    lineTo(-100f, height + 100f)
+//                    close()
+//                }
+//
+//                Canvas(modifier = Modifier.fillMaxSize()) {
+//                    drawPath(path = mediumColoredPath, color = mediumColor)
+//                    drawPath(path = lightColoredPath, color = lightColor)
+//                }
+//
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(15.dp)
+//                )
+//            }
+//        }
+//
+//        // Image
+//        Image(
+//            painter = painterResource(id = icon),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .size(84.dp)
+//        )
+//
+//        Spacer(modifier = Modifier.width(12.dp))
+//
+//        // Text
+//        Column(
+//            modifier = Modifier
+//                .fillMaxHeight()
+//                .padding(end = 8.dp),
+//            verticalArrangement = Arrangement.Center
+//        ) {
+//            Text(
+//                text = text,
+//                color = textColor,
+//                style = MaterialTheme.typography.bodyLarge,
+//                lineHeight = 20.sp
+//            )
+//        }
+//    }
+//}
+
+
+
 @Composable
 fun DashboardCard(
     icon: Int,
@@ -352,93 +477,104 @@ fun DashboardCard(
         verticalAlignment = Alignment.CenterVertically
 
     ) {
-        // Wavy Background Section
-        BoxWithConstraints(
+
+        Box(
             modifier = Modifier
-                .padding(7.5.dp)
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(10.dp))
-                .background(darkColor)
+                .size(84.dp), // Set a fixed size for the icon container
+            contentAlignment = Alignment.Center
         ) {
-            with(this) {
-                val width = constraints.maxWidth.toFloat()
-                val height = constraints.maxHeight.toFloat()
+            // Wavy Background Section
+            BoxWithConstraints(
+                modifier = Modifier
+                    .padding(7.5.dp)
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(darkColor)
+            ) {
+                with(this) {
+                    val width = constraints.maxWidth.toFloat()
+                    val height = constraints.maxHeight.toFloat()
 
-                // Medium colored path
-                val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-                val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-                val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-                val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-                val mediumColoredPoint5 = Offset(width * 1.4f, -height)
+                    // Medium colored path
+                    val mediumColoredPoint1 = Offset(0f, height * 0.3f)
+                    val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
+                    val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
+                    val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
+                    val mediumColoredPoint5 = Offset(width * 1.4f, -height)
 
-                val mediumColoredPath = Path().apply {
-                    moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-                    standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-                    standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-                    standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-                    standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-                    lineTo(width + 100f, height + 100f)
-                    lineTo(-100f, height + 100f)
-                    close()
+                    val mediumColoredPath = Path().apply {
+                        moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
+                        standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
+                        standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
+                        standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
+                        standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
+                        lineTo(width + 100f, height + 100f)
+                        lineTo(-100f, height + 100f)
+                        close()
+                    }
+
+                    // Light colored path
+                    val lightPoint1 = Offset(0f, height * 0.35f)
+                    val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
+                    val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
+                    val lightPoint4 = Offset(width * 0.65f, height)
+                    val lightPoint5 = Offset(width * 1.4f, -height / 3f)
+
+                    val lightColoredPath = Path().apply {
+                        moveTo(lightPoint1.x, lightPoint1.y)
+                        standardQuadFromTo(lightPoint1, lightPoint2)
+                        standardQuadFromTo(lightPoint2, lightPoint3)
+                        standardQuadFromTo(lightPoint3, lightPoint4)
+                        standardQuadFromTo(lightPoint4, lightPoint5)
+                        lineTo(width + 100f, height + 100f)
+                        lineTo(-100f, height + 100f)
+                        close()
+                    }
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawPath(path = mediumColoredPath, color = mediumColor)
+                        drawPath(path = lightColoredPath, color = lightColor)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(15.dp)
+                    )
                 }
-
-                // Light colored path
-                val lightPoint1 = Offset(0f, height * 0.35f)
-                val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-                val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-                val lightPoint4 = Offset(width * 0.65f, height)
-                val lightPoint5 = Offset(width * 1.4f, -height / 3f)
-
-                val lightColoredPath = Path().apply {
-                    moveTo(lightPoint1.x, lightPoint1.y)
-                    standardQuadFromTo(lightPoint1, lightPoint2)
-                    standardQuadFromTo(lightPoint2, lightPoint3)
-                    standardQuadFromTo(lightPoint3, lightPoint4)
-                    standardQuadFromTo(lightPoint4, lightPoint5)
-                    lineTo(width + 100f, height + 100f)
-                    lineTo(-100f, height + 100f)
-                    close()
-                }
-
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    drawPath(path = mediumColoredPath, color = mediumColor)
-                    drawPath(path = lightColoredPath, color = lightColor)
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(15.dp)
-                )
             }
+
+            // Image
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = text,
+                modifier = Modifier
+                    .size(50.dp)
+            )
         }
 
-        // Image
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = null,
-            modifier = Modifier
-                .size(84.dp)
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
         // Text
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(end = 8.dp),
+                .weight(1f),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = text,
                 color = textColor,
                 style = MaterialTheme.typography.bodyLarge,
-                lineHeight = 20.sp
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
+
+
+
 
 
 @Composable
@@ -449,6 +585,10 @@ fun FeatureItem(
         modifier = Modifier
             .padding(7.5.dp)
             .aspectRatio(1f)
+            .shadow( // Added shadow for elevation
+                elevation = 8.dp,
+                shape = RoundedCornerShape(10.dp)
+            )
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
     ) {
@@ -506,8 +646,8 @@ fun FeatureItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(15.dp),
-                contentAlignment = Alignment.Center // 👈 this centers the column
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -518,7 +658,7 @@ fun FeatureItem(
                         contentDescription = feature.title,
                         modifier = Modifier.size(94.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = feature.title,
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),

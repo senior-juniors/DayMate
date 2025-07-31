@@ -43,7 +43,7 @@ fun SemesterSelectionScreen(navController: NavController, userViewmodel: UserVie
 
     val semesters = (1..8).map { "Semester $it" }
     val branches = listOf("CSE", "ECE", "AIDE")
-    val batches = listOf("A1", "A2", "A3", "A4", "A5")
+    val batches = listOf("A1", "A2", "A3", "A4", "A5","B1","B2","B3","C1","C2","C3")
 
     Box(
         modifier = Modifier
