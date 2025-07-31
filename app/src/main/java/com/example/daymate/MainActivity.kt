@@ -21,6 +21,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.daymate.auth.UserViewmodel
+import com.example.daymate.event.EventViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,7 +34,8 @@ class MainActivity : ComponentActivity() {
        val navController = rememberNavController()
             val userViewModel: UserViewmodel by viewModels()
             userViewModel.fetchUserData()
-          AppNavigation(navController = navController)
+            val viewModel: EventViewModel = viewModel()
+          AppNavigation(viewModel)
         }
     }
 }
