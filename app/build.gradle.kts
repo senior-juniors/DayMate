@@ -88,7 +88,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore")
    // implementation ("com.google.firebase:firebase-firestore-24.10.0")
     implementation ("com.google.firebase:firebase-common:21.0.0")
-    //implementation("com.google.firebase:firebase-common:21.0.0")
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
 
 
@@ -130,6 +130,7 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.48")
     kapt ("com.google.dagger:hilt-android-compiler:2.48")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+
 
 
 

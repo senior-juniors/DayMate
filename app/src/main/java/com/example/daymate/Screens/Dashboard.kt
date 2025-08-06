@@ -262,6 +262,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                     }
                 }
                     DashboardCard(
+                        navController = navController,
                         icon = R.drawable.enjoy_img,
                         text = "Your\nToday's Classes",
                         background = Color.White,
@@ -275,6 +276,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                 Spacer(modifier = Modifier.height(12.dp))
 
                 DashboardCard(
+                    navController = navController,
                     icon = R.drawable.group_study,
                     text = "Pending\nAssignments",
                     background = Color.White,
@@ -457,6 +459,7 @@ fun DashboardGridSection() {
 
 @Composable
 fun DashboardCard(
+    navController: NavHostController,
     icon: Int,
     text: String,
     background: Color = Color.White,
@@ -467,8 +470,9 @@ fun DashboardCard(
     onClick: () -> Unit
 ) {
     Row(
+
         modifier = Modifier
-            .clickable { onClick() }
+            .clickable { navController.navigate("events") }
             .fillMaxWidth()
             .height(100.dp)
             .clip(RoundedCornerShape(16.dp))

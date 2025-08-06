@@ -7,8 +7,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,8 +19,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.daymate.Screens.ClubConfirmScreen
 import com.example.daymate.Screens.ClubScreen
 import com.example.daymate.Screens.DashboardScreen
@@ -28,13 +34,19 @@ import com.example.daymate.Screens.SemesterSelectionScreen
 import com.example.daymate.Screens.SignUpScreen
 import com.example.daymate.auth.AuthViewmodel
 import com.example.daymate.auth.UserViewmodel
+import com.example.daymate.event.AddEventScreen
+import com.example.daymate.event.EventDetailsScreen
+import com.example.daymate.event.EventListScreen
+import com.example.daymate.event.EventViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun AppNavigation(viewModel: EventViewModel) {
+    val navController = rememberNavController()
+    val events by viewModel.events.collectAsState()
     NavHost(
         navController = navController,
         startDestination = "splashScreen"
@@ -119,7 +131,26 @@ fun AppNavigation(navController: NavHostController) {
         composable("profileScreen") {
             ProfileScreen(navController)
         }
+        // event
+        composable("events") {
+            EventListScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("addEvent") {
+            AddEventScreen(viewModel = viewModel, navController = navController)
+        }
+        composable(
+            route = "eventDetails/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId")
+            val event = events.find { it.id == eventId }
 
+            if (event != null) {
+                EventDetailsScreen(event = event)
+            } else {
+                Text("Event not found")
+            }
+        }
 
     }
 }
