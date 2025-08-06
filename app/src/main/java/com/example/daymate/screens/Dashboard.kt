@@ -1,6 +1,7 @@
 package com.example.daymate.screens
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
@@ -66,7 +67,7 @@ import com.example.daymate.Features.standardQuadFromTo
 import com.example.daymate.R
 import com.example.daymate.auth.UserViewmodel
 import androidx.compose.material.ripple.rememberRipple
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -284,7 +285,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Grid Section
-                DashboardGridSection()
+                DashboardGridSection(navController)
             }
         }
     }
@@ -292,7 +293,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
 
 
 @Composable
-fun DashboardGridSection() {
+fun DashboardGridSection(navController: NavHostController) {
     val context = LocalContext.current
     val gridItems = listOf(
         Feature(
@@ -316,12 +317,21 @@ fun DashboardGridSection() {
             Color(0xFF98D7C2),
             Color(0xFF77C6A8),
             onClick = {
-                val driveUrl = "https://drive.google.com/drive/folders/1Ki5Q0oFkWZBjgQOJ1zPy6Qv1NDDTt5QF"
-                val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(driveUrl)).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
+                navController.navigate("studyMaterial")
+//                val signedInAccount = GoogleSignIn.getLastSignedInAccount(context)
+//
+//                if (signedInAccount != null) {
+//                    val driveUrl = "https://drive.google.com/drive/folders/1Ki5Q0oFkWZBjgQOJ1zPy6Qv1NDDTt5QF"
+//                    val intent = Intent(Intent.ACTION_VIEW).apply {
+//                        data = android.net.Uri.parse(driveUrl)
+//                        setPackage("com.google.android.apps.docs") // Forces open in Google Drive app
+//                    }
+//                    context.startActivity(intent)
+//                } else {
+//                    Toast.makeText(context, "Not signed in to Google", Toast.LENGTH_SHORT).show()
+//                }
             }
+
 
 
         ),
@@ -555,4 +565,17 @@ fun FeatureItem(
         }
     }
 }
-
+@Preview(showBackground = true)
+@Composable
+fun Dashard (){
+    MaterialTheme {
+        DashboardCard( icon = R.drawable.enjoy_img,
+            text = "1 Semester",
+            background = Color.White,
+            textColor = Color.Black,
+            mediumColor = Color(0xFF11D79A),
+            lightColor = Color(0xFF54E1B6),
+            darkColor = Color(0xFF28BD90),
+            onClick = {})
+    }
+}

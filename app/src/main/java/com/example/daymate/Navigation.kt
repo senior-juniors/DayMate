@@ -28,6 +28,7 @@ import com.example.daymate.screens.SemesterSelectionScreen
 import com.example.daymate.screens.SignUpScreen
 import com.example.daymate.auth.AuthViewmodel
 import com.example.daymate.auth.UserViewmodel
+import com.example.daymate.screens.StudyMaterial
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -118,6 +119,10 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable("profileScreen") {
             ProfileScreen(navController)
+        }
+        composable("studymaterial") {
+            StudyMaterial(navController)
+
         }
 
 
