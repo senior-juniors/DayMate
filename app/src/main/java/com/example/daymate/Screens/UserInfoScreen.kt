@@ -1,6 +1,5 @@
 package com.example.daymate.Screens
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
@@ -35,15 +34,13 @@ import com.example.daymate.auth.UserViewmodel
 
 @Composable
 fun SemesterSelectionScreen(navController: NavController, userViewmodel: UserViewmodel) {
-
-
     var selectedSemester by remember { mutableStateOf<String?>(null) }
     var selectedBranch by remember { mutableStateOf<String?>(null) }
     var selectedBatch by remember { mutableStateOf<String?>(null) }
 
     val semesters = (1..8).map { "Semester $it" }
     val branches = listOf("CSE", "ECE", "AIDE")
-    val batches = listOf("A1", "A2", "A3", "A4", "A5")
+    val batches = listOf("A1", "A2", "A3", "A4", "A5","B1","B2","B3","C1","C2","C3")
 
     Box(
         modifier = Modifier

@@ -1,29 +1,17 @@
 package com.example.daymate
 
 
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.daymate.Screens.ClubConfirmScreen
 import com.example.daymate.Screens.ClubScreen
 import com.example.daymate.Screens.DashboardScreen
@@ -32,78 +20,78 @@ import com.example.daymate.Screens.LoginScreen
 import com.example.daymate.Screens.ProfileScreen
 import com.example.daymate.Screens.SemesterSelectionScreen
 import com.example.daymate.Screens.SignUpScreen
-import com.example.daymate.auth.AuthViewmodel
 import com.example.daymate.auth.UserViewmodel
-import com.example.daymate.event.AddEventScreen
-import com.example.daymate.event.EventDetailsScreen
-import com.example.daymate.event.EventListScreen
-import com.example.daymate.event.EventViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.example.daymate.auth.rememberGoogleAuthLauncher
+import com.example.daymate.classroom.ClassroomScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(viewModel: EventViewModel) {
-    val navController = rememberNavController()
-    val events by viewModel.events.collectAsState()
+fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "splashScreen"
     ) {
-        composable("FirstScreen") {
-            val context = LocalContext.current
-            val authViewModel: AuthViewmodel = hiltViewModel()
-            val userViewModel: UserViewmodel = viewModel()
-
-            val launcher =
-                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    try {
-                        val account = task.getResult(ApiException::class.java)
-                        account?.idToken?.let { token ->
-                            authViewModel.signInWithGoogle(token) { success ->
-                                if (success) {
-                                    // ✅ Always go to userinfo screen after sign in
-//                                    navController.navigate("userinfo") {
-//                                        popUpTo("FirstScreen") { inclusive = true }
+//        composable("FirstScreen") {
+//            val context = LocalContext.current
+//            val authViewModel: AuthViewmodel = hiltViewModel()
+//            val userViewModel: UserViewmodel = viewModel()
+//
+//            val launcher =
+//                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+//                    try {
+//                        val account = task.getResult(ApiException::class.java)
+//                        account?.idToken?.let { token ->
+//                            authViewModel.signInWithGoogle(token) { success ->
+//                                if (success) {
+//                                    // ✅ Always go to userinfo screen after sign in
+////                                    navController.navigate("userinfo") {
+////                                        popUpTo("FirstScreen") { inclusive = true }
+////                                    }
+//
+//                                    // If you want to check if user data exists before navigating, use this instead:
+//                                userViewModel.checkUserDataExists { exists ->
+//                                    if (exists) {
+//                                        navController.navigate("dashboard") {
+//                                            popUpTo("FirstScreen") { inclusive = true }
+//                                        }
+//                                    } else {
+//                                        navController.navigate("userinfoScreen") {
+//                                            popUpTo("FirstScreen") { inclusive = true }
+//                                        }
 //                                    }
-
-                                    // If you want to check if user data exists before navigating, use this instead:
-                                userViewModel.checkUserDataExists { exists ->
-                                    if (exists) {
-                                        navController.navigate("dashboard") {
-                                            popUpTo("FirstScreen") { inclusive = true }
-                                        }
-                                    } else {
-                                        navController.navigate("userinfoScreen") {
-                                            popUpTo("FirstScreen") { inclusive = true }
-                                        }
-                                    }
-                                }
-
-                                }
-                            }
-                        }
-                    } catch (e: ApiException) {
-                        Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            val launchGoogleSignIn = {
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(context.getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-                val client = GoogleSignIn.getClient(context, gso)
-                launcher.launch(client.signInIntent)
-            }
-
+//                                }
+//
+//                                }
+//                            }
+//                        }
+//                    } catch (e: ApiException) {
+//                        Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//            val launchGoogleSignIn = {
+//                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                    .requestIdToken(context.getString(R.string.default_web_client_id))
+//                    .requestEmail()
+//                    .build()
+//                val client = GoogleSignIn.getClient(context, gso)
+//                launcher.launch(client.signInIntent)
+//            }
+//
+//            DayMateFirstScreen(
+//                navController = navController,
+//                onGoogleSignInClick = launchGoogleSignIn
+//            )
+//        }
+        composable("FirstScreen") {
+            val launchGoogleSignIn = rememberGoogleAuthLauncher(navController)
             DayMateFirstScreen(
                 navController = navController,
                 onGoogleSignInClick = launchGoogleSignIn
             )
         }
+
 
 
         composable("login") {
@@ -131,26 +119,11 @@ fun AppNavigation(viewModel: EventViewModel) {
         composable("profileScreen") {
             ProfileScreen(navController)
         }
-        // event
-        composable("events") {
-            EventListScreen(viewModel = viewModel, navController = navController)
-        }
-        composable("addEvent") {
-            AddEventScreen(viewModel = viewModel, navController = navController)
-        }
-        composable(
-            route = "eventDetails/{eventId}",
-            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val eventId = backStackEntry.arguments?.getString("eventId")
-            val event = events.find { it.id == eventId }
 
-            if (event != null) {
-                EventDetailsScreen(event = event)
-            } else {
-                Text("Event not found")
-            }
+        composable("classroom") {
+            ClassroomScreen(navController)
         }
+
 
     }
 }

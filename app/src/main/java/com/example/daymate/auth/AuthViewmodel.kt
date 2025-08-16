@@ -1,5 +1,6 @@
 package com.example.daymate.auth
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -14,6 +15,14 @@ class AuthViewmodel:ViewModel() {
                 onResult(task.isSuccessful)
             }
     }
+
+    fun signOut(context: Context, onComplete: () -> Unit) {
+        auth.signOut()
+        GoogleAuthManager.signOut(context) {
+            onComplete()
+        }
+    }
+
 
     fun getCurrentUser() = auth.currentUser
 }
