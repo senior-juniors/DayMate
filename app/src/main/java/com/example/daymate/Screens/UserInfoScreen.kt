@@ -1,6 +1,5 @@
 package com.example.daymate.Screens
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
@@ -35,8 +34,6 @@ import com.example.daymate.auth.UserViewmodel
 
 @Composable
 fun SemesterSelectionScreen(navController: NavController, userViewmodel: UserViewmodel) {
-
-
     var selectedSemester by remember { mutableStateOf<String?>(null) }
     var selectedBranch by remember { mutableStateOf<String?>(null) }
     var selectedBatch by remember { mutableStateOf<String?>(null) }

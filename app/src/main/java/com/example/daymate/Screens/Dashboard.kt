@@ -231,7 +231,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                         onDismissRequest = {showSheet=false},
                         modifier = Modifier.fillMaxHeight(0.6f),
                         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                    containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = MaterialTheme.colorScheme.surface
                     ) {
                         Text(
                             "Today's Timetable",
@@ -261,16 +261,16 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                         }
                     }
                 }
-                    DashboardCard(
-                        icon = R.drawable.enjoy_img,
-                        text = "Your\nToday's Classes",
-                        background = Color.White,
-                        textColor = Color.Black,
-                        mediumColor = Color(0xFF11D79A),
-                        lightColor = Color(0xFF54E1B6),
-                        darkColor = Color(0xFF28BD90),
-                        onClick = {showSheet=true}
-                    )
+                DashboardCard(
+                    icon = R.drawable.enjoy_img,
+                    text = "Your\nToday's Classes",
+                    background = Color.White,
+                    textColor = Color.Black,
+                    mediumColor = Color(0xFF11D79A),
+                    lightColor = Color(0xFF54E1B6),
+                    darkColor = Color(0xFF28BD90),
+                    onClick = {showSheet=true}
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -282,7 +282,9 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                     mediumColor = Color(0xFF9FA4FF),
                     lightColor = Color(0xFFAEB4FE),
                     darkColor = Color(0xFF8F98FD),
-                    onClick = {}
+                    onClick = {
+                        navController.navigate("classroom")
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -664,11 +666,10 @@ fun FeatureItem(
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                         color = Color.White,
                         textAlign = TextAlign.Center
+                        //fneuibncefuiwnorie
                     )
                 }
             }
         }
     }
 }
-
-

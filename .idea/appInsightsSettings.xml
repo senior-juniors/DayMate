@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.daymate" />
-                  <option name="mobileSdkAppId" value="1:419743742032:android:68f1c8234b23f2e7e47955" />
-                  <option name="projectId" value="daymate-e74c9" />
-                  <option name="projectNumber" value="419743742032" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
