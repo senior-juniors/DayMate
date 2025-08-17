@@ -82,30 +82,30 @@ fun ProfileScreen(navController: NavController) {
                 userViewModel.fetchUserData()
             }
 
-            BoxWithConstraints(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                with(this) {
-                    val width = constraints.maxWidth.toFloat()
-                    val height = constraints.maxHeight.toFloat()
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            with(this) {
+                val width = constraints.maxWidth.toFloat()
+                val height = constraints.maxHeight.toFloat()
 
-                    val mediumColoredPath = Path().apply {
-                        val mediumColoredPoint1 = Offset(0f, height * 0.8f)
-                        val mediumColoredPoint2 = Offset(width * 0.25f, height * 0.9f)
-                        val mediumColoredPoint3 = Offset(width * 0.5f, height * 0.75f)
-                        val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.95f)
-                        val mediumColoredPoint5 = Offset(width * 1.4f, height * 0.6f)
+                val mediumColoredPath = Path().apply {
+                    val mediumColoredPoint1 = Offset(0f, height * 0.8f)
+                    val mediumColoredPoint2 = Offset(width * 0.25f, height * 0.9f)
+                    val mediumColoredPoint3 = Offset(width * 0.5f, height * 0.75f)
+                    val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.95f)
+                    val mediumColoredPoint5 = Offset(width * 1.4f, height * 0.6f)
 
-                        moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-                        standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-                        standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-                        standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-                        standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-                        lineTo(width + 100f, height + 100f)
-                        lineTo(-100f, height + 100f)
-                        close()
-                    }
+                    moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
+                    standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
+                    standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
+                    standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
+                    standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
+                    lineTo(width + 100f, height + 100f)
+                    lineTo(-100f, height + 100f)
+                    close()
+                }
 
                     val lightColoredPath = Path().apply {
 
