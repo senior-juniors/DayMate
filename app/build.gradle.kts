@@ -103,6 +103,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-common")
+    implementation("com.google.firebase:firebase-database-ktx")
 
     // =================== Google & Third-Party =======================
     // Use one consistent version for Google Play Services Auth
