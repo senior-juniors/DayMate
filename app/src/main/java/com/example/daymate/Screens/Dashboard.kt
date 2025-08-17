@@ -290,7 +290,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Grid Section
-                DashboardGridSection()
+                DashboardGridSection(navController = navController)
             }
         }
     }
@@ -298,14 +298,15 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
 
 
 @Composable
-fun DashboardGridSection() {
+fun DashboardGridSection(navController: NavHostController) {
     val gridItems = listOf(
         Feature(
             "Events",
             R.drawable.enjoy_img,
             Color(0xFFD0D1FF),
             Color(0xFFB1B2FF),
-            Color(0xFF9293F0)
+            Color(0xFF9293F0),
+            onClick = { navController.navigate("events") }
         ),
         Feature(
             "Clubs Meeting",
@@ -593,6 +594,7 @@ fun FeatureItem(
             )
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
+            .clickable { feature.onClick() } // Add this line to make it clickable
     ) {
         with(this) {
             val width = constraints.maxWidth.toFloat()
@@ -666,7 +668,6 @@ fun FeatureItem(
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                         color = Color.White,
                         textAlign = TextAlign.Center
-                        //fneuibncefuiwnorie
                     )
                 }
             }
