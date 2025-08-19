@@ -26,7 +26,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +33,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +57,9 @@ import com.example.daymate.Features.standardQuadFromTo
 import com.example.daymate.R
 import com.example.daymate.auth.UserViewmodel
 import android.icu.util.Calendar
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -238,7 +239,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                             style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(16.dp)
                         )
-                        Divider(modifier = Modifier.padding(vertical = 8.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                         if (timetableList.isEmpty()) {
                             Text(
                                 "No classes today!",
@@ -320,7 +321,8 @@ fun DashboardGridSection(navController: NavHostController) {
             R.drawable.enjoy_img,
             Color(0xFFAEE5D4),
             Color(0xFF98D7C2),
-            Color(0xFF77C6A8)
+            Color(0xFF77C6A8),
+            onClick = { navController.navigate("semester")}
         ),
         Feature(
             "Canteen",
@@ -673,4 +675,10 @@ fun FeatureItem(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun DashboardPreview(){
+    DashboardScreen(rememberNavController(), UserViewmodel())
 }
