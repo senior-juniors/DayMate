@@ -27,6 +27,7 @@ import com.example.daymate.Screens.LoginScreen
 import com.example.daymate.Screens.ProfileScreen
 import com.example.daymate.Screens.SemesterSelectionScreen
 import com.example.daymate.Screens.SignUpScreen
+import com.example.daymate.Screens.StudyMaterial
 import com.example.daymate.auth.UserViewmodel
 import com.example.daymate.auth.rememberGoogleAuthLauncher
 import com.example.daymate.classroom.ClassroomScreen
@@ -139,6 +140,9 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable("events") {
             EventListScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("semester") {
+            StudyMaterial(  navController)
         }
         composable("addEvent") {
             AddEventScreen(viewModel = viewModel, navController = navController)
