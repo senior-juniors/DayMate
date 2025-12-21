@@ -35,6 +35,7 @@ import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
 import com.example.daymate.event.EventListScreen
 import com.example.daymate.event.EventViewModel
+import com.example.daymate.todo.ToDoScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -160,6 +161,10 @@ fun AppNavigation(navController: NavHostController) {
                 Text("Event not found")
             }
         }
+        composable("todo_screen") {
+            ToDoScreen()
+        }
+
 
     }
 }
