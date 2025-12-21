@@ -12,7 +12,24 @@ class AuthViewmodel:ViewModel() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                onResult(task.isSuccessful)
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    val email = user?.email
+                    
+                    // Validate college email domain or admin email
+                    val isCollegeEmail = email?.endsWith("@iiitkota.ac.in") == true
+                    val isAdminEmail = email == "hrmeenam636@gmail.com"
+                    
+                    if (email == null || (!isCollegeEmail && !isAdminEmail)) {
+                        // Sign out the user if email doesn't match
+                        auth.signOut()
+                        onResult(false)
+                    } else {
+                        onResult(true)
+                    }
+                } else {
+                    onResult(false)
+                }
             }
     }
 
