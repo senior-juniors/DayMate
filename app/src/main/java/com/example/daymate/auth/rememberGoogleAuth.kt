@@ -26,7 +26,22 @@ fun rememberGoogleAuthLauncher(
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
             val account = task.getResult(ApiException::class.java)
-            account?.idToken?.let { token ->
+            val email = account?.email
+            
+            // Validate college email domain or admin email
+            val isCollegeEmail = email?.endsWith("@iiitkota.ac.in") == true
+            val isAdminEmail = email == "hrmeenam636@gmail.com"
+            
+            if (email == null || (!isCollegeEmail && !isAdminEmail)) {
+                Toast.makeText(
+                    context, 
+                    "Please use your college email (@iiitkota.ac.in)", 
+                    Toast.LENGTH_LONG
+                ).show()
+                return@rememberLauncherForActivityResult
+            }
+            
+            account.idToken?.let { token ->
                 authViewModel.signInWithGoogle(token) { success ->
                     if (success) {
                         userViewModel.checkUserDataExists { exists ->
@@ -36,6 +51,8 @@ fun rememberGoogleAuthLauncher(
                                 popUpTo("FirstScreen") { inclusive = true }
                             }
                         }
+                    } else {
+                        Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
