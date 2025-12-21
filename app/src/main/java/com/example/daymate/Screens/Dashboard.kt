@@ -96,7 +96,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF06154C)) // Optional base background
+            .background(Color(0xFF06154C))
     ) {
         // Replacing old Canvas with new background
         BoxWithConstraints(
