@@ -325,11 +325,12 @@ fun DashboardGridSection(navController: NavHostController) {
             onClick = { navController.navigate("semester")}
         ),
         Feature(
-            "Canteen",
+            "Courses",
             R.drawable.group_study,
             Color(0xFFFFD1D3),
             Color(0xFFFFB6B9),
-            Color(0xFFE59497)
+            Color(0xFFE59497),
+            onClick = { navController.navigate("course") }
         )
     )
 
@@ -347,116 +348,6 @@ fun DashboardGridSection(navController: NavHostController) {
     }
 }
 
-
-//@Composable
-//fun DashboardCard(
-//    icon: Int,
-//    text: String,
-//    background: Color = Color.White,
-//    textColor: Color = Color.Black,
-//    lightColor: Color,
-//    mediumColor: Color,
-//    darkColor: Color,
-//    onClick: () -> Unit
-//) {
-//    Row(
-//        modifier = Modifier
-//            .clickable { onClick() }
-//            .fillMaxWidth()
-//            .height(100.dp)
-//            .clip(RoundedCornerShape(16.dp))
-//            .background(background)
-//            .padding(8.dp),
-//        verticalAlignment = Alignment.CenterVertically
-//
-//    ) {
-//        // Wavy Background Section
-//        BoxWithConstraints(
-//            modifier = Modifier
-//                .padding(7.5.dp)
-//                .aspectRatio(1f)
-//                .clip(RoundedCornerShape(10.dp))
-//                .background(darkColor)
-//        ) {
-//            with(this) {
-//                val width = constraints.maxWidth.toFloat()
-//                val height = constraints.maxHeight.toFloat()
-//
-//                // Medium colored path
-//                val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-//                val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-//                val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-//                val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-//                val mediumColoredPoint5 = Offset(width * 1.4f, -height)
-//
-//                val mediumColoredPath = Path().apply {
-//                    moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-//                    standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-//                    standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-//                    standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-//                    standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-//                    lineTo(width + 100f, height + 100f)
-//                    lineTo(-100f, height + 100f)
-//                    close()
-//                }
-//
-//                // Light colored path
-//                val lightPoint1 = Offset(0f, height * 0.35f)
-//                val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-//                val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-//                val lightPoint4 = Offset(width * 0.65f, height)
-//                val lightPoint5 = Offset(width * 1.4f, -height / 3f)
-//
-//                val lightColoredPath = Path().apply {
-//                    moveTo(lightPoint1.x, lightPoint1.y)
-//                    standardQuadFromTo(lightPoint1, lightPoint2)
-//                    standardQuadFromTo(lightPoint2, lightPoint3)
-//                    standardQuadFromTo(lightPoint3, lightPoint4)
-//                    standardQuadFromTo(lightPoint4, lightPoint5)
-//                    lineTo(width + 100f, height + 100f)
-//                    lineTo(-100f, height + 100f)
-//                    close()
-//                }
-//
-//                Canvas(modifier = Modifier.fillMaxSize()) {
-//                    drawPath(path = mediumColoredPath, color = mediumColor)
-//                    drawPath(path = lightColoredPath, color = lightColor)
-//                }
-//
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(15.dp)
-//                )
-//            }
-//        }
-//
-//        // Image
-//        Image(
-//            painter = painterResource(id = icon),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .size(84.dp)
-//        )
-//
-//        Spacer(modifier = Modifier.width(12.dp))
-//
-//        // Text
-//        Column(
-//            modifier = Modifier
-//                .fillMaxHeight()
-//                .padding(end = 8.dp),
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Text(
-//                text = text,
-//                color = textColor,
-//                style = MaterialTheme.typography.bodyLarge,
-//                lineHeight = 20.sp
-//            )
-//        }
-//    }
-//}
 
 
 
