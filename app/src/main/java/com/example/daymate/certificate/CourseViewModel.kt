@@ -12,13 +12,21 @@ class CourseViewModel : ViewModel() {
     fun addCourse(
         title: String, description: String, provider: String, link: String, duration: String, certificateType: String
     ) {
+        println("CourseViewModel: addCourse called for course: $title")
         viewModelScope.launch {
-            val courseData = Course(
-                title = title, description = description, provider = provider, link = link,
-                duration = duration, certificateType = certificateType, createdAt = System.currentTimeMillis()
-            )
-            repository.addCourse(courseData)
-            println("Course added successfully")
+            try {
+                val courseData = Course(
+                    title = title, description = description, provider = provider, link = link,
+                    duration = duration, certificateType = certificateType, createdAt = System.currentTimeMillis()
+                )
+                println("CourseViewModel: Calling repository.addCourse")
+                val result = repository.addCourse(courseData)
+                println("CourseViewModel: Repository returned result: $result")
+                println("CourseViewModel: Course added successfully")
+            } catch (e: Exception) {
+                println("CourseViewModel: Exception caught - ${e.message}")
+                e.printStackTrace()
+            }
         }
     }
 

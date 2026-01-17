@@ -229,6 +229,9 @@ fun ProfileScreen(navController: NavController) {
                 onClick = {
                     userViewModel.signOut()
 
+                    // Clear admin status
+                    com.example.daymate.admin.AdminManager.clearAdminStatus(context)
+
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(context.getString(R.string.default_web_client_id))
                         .requestEmail()

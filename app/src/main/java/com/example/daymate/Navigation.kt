@@ -29,6 +29,7 @@ import com.example.daymate.Screens.ProfileScreen
 import com.example.daymate.Screens.SemesterSelectionScreen
 import com.example.daymate.Screens.SignUpScreen
 import com.example.daymate.Screens.StudyMaterial
+import com.example.daymate.admin.AdminLoginScreen
 import com.example.daymate.auth.UserViewmodel
 import com.example.daymate.auth.rememberGoogleAuthLauncher
 import com.example.daymate.certificate.CourseDetailScreen
@@ -39,6 +40,7 @@ import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
 import com.example.daymate.event.EventListScreen
 import com.example.daymate.event.EventViewModel
+import com.example.daymate.todo.ToDoScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -62,13 +64,27 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-
-
         composable("login") {
             LoginScreen(navController)
         }
         composable("signup") {
             SignUpScreen(navController)
+        }
+        composable ("admin_login"){
+            AdminLoginScreen(navController)
+        }
+        composable("course_detail/{courseId}") { backStackEntry ->
+            val courseId = backStackEntry.arguments?.getString("courseId")
+            val course = course.find { it.id == courseId }
+            if (course != null) {
+                CourseDetailScreen(
+                   courseId = courseId,
+                    viewModel = courseViewModel,
+                    navController = navController
+                )
+            } else {
+                Text("Course not found")
+            }
         }
 
         composable("clubscreen") {
@@ -93,6 +109,16 @@ fun AppNavigation(navController: NavHostController) {
         composable("classroom") {
             ClassroomScreen(navController)
         }
+
+        composable("study_material") {
+            StudyMaterial(navController)
+        }
+
+       composable("courses") {
+            CourseListScreen(viewModel = courseViewModel, navController = navController)
+        }
+
+
         // event
         composable("events") {
             EventListScreen(viewModel = eventViewModel, navController = navController)
