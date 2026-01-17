@@ -33,16 +33,13 @@ import com.example.daymate.auth.UserViewmodel
 import com.example.daymate.auth.rememberGoogleAuthLauncher
 import com.example.daymate.certificate.CourseDetailScreen
 import com.example.daymate.certificate.CourseListScreen
-import com.example.daymate.certificate.CourseRepository
 import com.example.daymate.certificate.CourseViewModel
 import com.example.daymate.classroom.ClassroomScreen
 import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
 import com.example.daymate.event.EventListScreen
 import com.example.daymate.event.EventViewModel
-import com.example.daymate.todo.ToDoScreen
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.database
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
