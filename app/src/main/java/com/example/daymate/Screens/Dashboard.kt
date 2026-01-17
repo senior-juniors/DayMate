@@ -501,14 +501,14 @@ fun DashboardGridSection(navController: NavHostController) {
             Color(0xFFE59497),
             onClick = { navController.navigate("canteen") }
         ),
-        Feature(
-            "To-Do",
-            R.drawable.group_study,
-            Color(0xFFD1EAFF),
-            Color(0xFFB6C6FF),
-            Color(0xFF9495E5),
-            onClick = { navController.navigate("todo_screen") }
-        )
+//        Feature(
+//            "To-Do",
+//            R.drawable.group_study,
+//            Color(0xFFD1EAFF),
+//            Color(0xFFB6C6FF),
+//            Color(0xFF9495E5),
+//            onClick = { navController.navigate("todo_screen") }
+        //)
     )
 
     LazyVerticalGrid(
