@@ -18,14 +18,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +40,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,17 +55,25 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.daymate.Features.Feature
 import com.example.daymate.Features.standardQuadFromTo
 import com.example.daymate.R
 import com.example.daymate.auth.UserViewmodel
 import android.icu.util.Calendar
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
+import com.example.daymate.todo.AddEditTaskDialog
+import com.example.daymate.todo.Task
+import com.example.daymate.todo.TaskViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -191,7 +205,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                             )
                             .clip(CircleShape)
                             .background(Color.White)
-                            .clickable{navController.navigate("profileScreen")},
+                            .clickable { navController.navigate("profileScreen") },
                         tint = Color(0xFF0F1D57)
                     )
                 }
@@ -290,12 +304,166 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                ToDoSection()
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // Grid Section
                 DashboardGridSection(navController = navController)
             }
         }
     }
 }
+
+@Composable
+fun ToDoSection(taskViewModel: TaskViewModel = viewModel()) {
+    val tasks by taskViewModel.allTasks.collectAsState(initial = emptyList())
+    var showAddEditDialog by remember { mutableStateOf(false) }
+    var showTaskDetailDialog by remember { mutableStateOf(false) }
+    var selectedTask by remember { mutableStateOf<Task?>(null) }
+
+    Column {
+        Text(
+            text = "Your To-Dos",
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(tasks) { task ->
+                ToDoChip(task = task, onClick = {
+                    selectedTask = task
+                    showTaskDetailDialog = true
+                })
+            }
+            item {
+                AddToDoChip(onClick = {
+                    selectedTask = null
+                    showAddEditDialog = true
+                })
+            }
+        }
+    }
+
+    if (showAddEditDialog) {
+        AddEditTaskDialog(
+            task = selectedTask,
+            onDismiss = { showAddEditDialog = false },
+            onSave = { title, description, reminderTime ->
+                if (selectedTask == null) {
+                    taskViewModel.insert(Task(title = title, description = description, reminderTime = reminderTime))
+                } else {
+                    val updatedTask = selectedTask!!.copy(title = title, description = description, reminderTime = reminderTime)
+                    taskViewModel.update(updatedTask)
+                }
+                showAddEditDialog = false
+                selectedTask = null
+            }
+        )
+    }
+
+    if (showTaskDetailDialog && selectedTask != null) {
+        TaskDetailDialog(
+            task = selectedTask!!,
+            onDismiss = {
+                showTaskDetailDialog = false
+                selectedTask = null
+            },
+            onEdit = {
+                showTaskDetailDialog = false
+                showAddEditDialog = true
+            },
+            onDelete = {
+                taskViewModel.delete(selectedTask!!)
+                showTaskDetailDialog = false
+                selectedTask = null
+            }
+        )
+    }
+}
+
+@Composable
+fun TaskDetailDialog(
+    task: Task,
+    onDismiss: () -> Unit,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF5566A3),
+        title = { Text(task.title,color = Color.White) },
+        text = { Text(task.description,color=Color.White) },
+        confirmButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Default.Edit, contentDescription = "Edit Task",
+                        tint = Color.White)
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Default.Delete, tint=Color.White,contentDescription = "Delete Task")
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close",color=Color.White)
+            }
+        }
+    )
+}
+
+
+@Composable
+fun ToDoChip(task: Task, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .width(150.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF69ECC4).copy(alpha = 0.2f)
+        )
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = task.title, fontWeight = FontWeight.Bold, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = task.description, color = Color.Black, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
+    }
+}
+
+@Composable
+fun AddToDoChip(onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .width(150.dp)
+            .height(80.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF69ECC4).copy(alpha = 0.2f)
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add To-Do",
+                tint = Color.White,
+                modifier = Modifier.size(40.dp)
+            )
+        }
+    }
+}
+
 
 
 @Composable
@@ -475,6 +643,8 @@ fun DashboardCard(
         }
     }
 }
+
+
 
 
 
