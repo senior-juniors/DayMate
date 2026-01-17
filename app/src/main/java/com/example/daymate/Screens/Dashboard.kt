@@ -96,7 +96,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF06154C)) // Optional base background
+            .background(Color(0xFF06154C))
     ) {
         // Replacing old Canvas with new background
         BoxWithConstraints(
@@ -264,7 +264,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
                 }
                 DashboardCard(
                     icon = R.drawable.enjoy_img,
-                    text = "Your\nToday's Classes",
+                    text = "Today's Classes",
                     background = Color.White,
                     textColor = Color.Black,
                     mediumColor = Color(0xFF11D79A),
@@ -277,7 +277,7 @@ fun DashboardScreen(navController: NavHostController,userViewModel: UserViewmode
 
                 DashboardCard(
                     icon = R.drawable.group_study,
-                    text = "Pending\nAssignments",
+                    text = "Pending Assignments",
                     background = Color.White,
                     textColor = Color.Black,
                     mediumColor = Color(0xFF9FA4FF),
@@ -314,7 +314,8 @@ fun DashboardGridSection(navController: NavHostController) {
             R.drawable.group_study,
             Color(0xFFFFEDC2),
             Color(0xFFFFDD95),
-            Color(0xFFE6C76F)
+            Color(0xFFE6C76F),
+            onClick = { navController.navigate("clubscreen") }
         ),
         Feature(
             "Study Material",
@@ -322,7 +323,7 @@ fun DashboardGridSection(navController: NavHostController) {
             Color(0xFFAEE5D4),
             Color(0xFF98D7C2),
             Color(0xFF77C6A8),
-            onClick = { navController.navigate("semester")}
+            onClick = { navController.navigate("study_material") }
         ),
         Feature(
             "Courses",
@@ -330,7 +331,15 @@ fun DashboardGridSection(navController: NavHostController) {
             Color(0xFFFFD1D3),
             Color(0xFFFFB6B9),
             Color(0xFFE59497),
-            onClick = { navController.navigate("course") }
+            onClick = { navController.navigate("canteen") }
+        ),
+        Feature(
+            "To-Do",
+            R.drawable.group_study,
+            Color(0xFFD1EAFF),
+            Color(0xFFB6C6FF),
+            Color(0xFF9495E5),
+            onClick = { navController.navigate("todo_screen") }
         )
     )
 
@@ -347,8 +356,6 @@ fun DashboardGridSection(navController: NavHostController) {
         }
     }
 }
-
-
 
 
 @Composable
@@ -566,10 +573,4 @@ fun FeatureItem(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun DashboardPreview(){
-    DashboardScreen(rememberNavController(), UserViewmodel())
 }

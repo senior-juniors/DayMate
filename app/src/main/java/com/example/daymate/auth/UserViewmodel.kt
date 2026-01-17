@@ -1,8 +1,6 @@
 package com.example.daymate.auth
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -126,6 +124,10 @@ class UserViewmodel : ViewModel() {
     }
 
 
+    private var userExistsCache: Boolean? = null
+    private var lastCheckTime: Long = 0
+    private val CACHE_VALIDITY_MS = 60000 // 1 minute cache
+
     // ✅ Check if user data exists
     fun checkUserDataExists(onResult: (Boolean) -> Unit) {
         val user = auth.currentUser
@@ -134,10 +136,19 @@ class UserViewmodel : ViewModel() {
             return
         }
 
+        val currentTime = System.currentTimeMillis()
+        if (userExistsCache != null && (currentTime - lastCheckTime) < CACHE_VALIDITY_MS) {
+            onResult(userExistsCache!!)
+            return
+        }
+
         db.collection("users").document(user.uid)
             .get()
             .addOnSuccessListener { document ->
-                onResult(document.exists())
+                val exists = document.exists()
+                userExistsCache = exists
+                lastCheckTime = currentTime
+                onResult(exists)
             }
             .addOnFailureListener {
                 Log.e("CHECK_USER", "Error checking user data: ${it.message}")

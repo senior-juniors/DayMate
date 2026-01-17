@@ -40,7 +40,7 @@ import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
 import com.example.daymate.event.EventListScreen
 import com.example.daymate.event.EventViewModel
-import com.google.firebase.Firebase
+import com.example.daymate.todo.ToDoScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
@@ -116,22 +116,10 @@ fun AppNavigation(navController: NavHostController) {
                 Text("Event not found")
             }
         }
-        composable("semester")
-        {
-            StudyMaterial(navController)
+        composable("todo_screen") {
+            ToDoScreen()
         }
-        // course
-        composable("course") {
-            // Passing the correctly initialized ViewModel
-            CourseListScreen(viewModel = courseViewModel,navController=navController)
-        }
-        composable(
-            "course_detail/{courseId}",
-            arguments = listOf(navArgument("courseId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId")
-            CourseDetailScreen(courseId = courseId, viewModel = courseViewModel, navController = navController)
-        }
+
 
     }
 }
