@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -30,76 +31,29 @@ import com.example.daymate.Screens.SignUpScreen
 import com.example.daymate.Screens.StudyMaterial
 import com.example.daymate.auth.UserViewmodel
 import com.example.daymate.auth.rememberGoogleAuthLauncher
+import com.example.daymate.certificate.CourseDetailScreen
+import com.example.daymate.certificate.CourseListScreen
+import com.example.daymate.certificate.CourseViewModel
 import com.example.daymate.classroom.ClassroomScreen
 import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
 import com.example.daymate.event.EventListScreen
 import com.example.daymate.event.EventViewModel
-import com.example.daymate.todo.ToDoScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(navController: NavHostController) {
-    val viewModel = EventViewModel()
-    val events by viewModel.events.collectAsState()
+    val eventViewModel = viewModel<EventViewModel>()
+    val courseViewModel = viewModel<CourseViewModel>()
+    val events by eventViewModel.events.collectAsState()
+    val course by courseViewModel.courses.collectAsState()
+
+
     NavHost(
         navController = navController,
         startDestination = "splashScreen"
     ) {
-//        composable("FirstScreen") {
-//            val context = LocalContext.current
-//            val authViewModel: AuthViewmodel = hiltViewModel()
-//            val userViewModel: UserViewmodel = viewModel()
-//
-//            val launcher =
-//                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//                    try {
-//                        val account = task.getResult(ApiException::class.java)
-//                        account?.idToken?.let { token ->
-//                            authViewModel.signInWithGoogle(token) { success ->
-//                                if (success) {
-//                                    // ✅ Always go to userinfo screen after sign in
-////                                    navController.navigate("userinfo") {
-////                                        popUpTo("FirstScreen") { inclusive = true }
-////                                    }
-//
-//                                    // If you want to check if user data exists before navigating, use this instead:
-//                                userViewModel.checkUserDataExists { exists ->
-//                                    if (exists) {
-//                                        navController.navigate("dashboard") {
-//                                            popUpTo("FirstScreen") { inclusive = true }
-//                                        }
-//                                    } else {
-//                                        navController.navigate("userinfoScreen") {
-//                                            popUpTo("FirstScreen") { inclusive = true }
-//                                        }
-//                                    }
-//                                }
-//
-//                                }
-//                            }
-//                        }
-//                    } catch (e: ApiException) {
-//                        Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//
-//            val launchGoogleSignIn = {
-//                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                    .requestIdToken(context.getString(R.string.default_web_client_id))
-//                    .requestEmail()
-//                    .build()
-//                val client = GoogleSignIn.getClient(context, gso)
-//                launcher.launch(client.signInIntent)
-//            }
-//
-//            DayMateFirstScreen(
-//                navController = navController,
-//                onGoogleSignInClick = launchGoogleSignIn
-//            )
-//        }
         composable("FirstScreen") {
             val launchGoogleSignIn = rememberGoogleAuthLauncher(navController)
             DayMateFirstScreen(
@@ -139,14 +93,12 @@ fun AppNavigation(navController: NavHostController) {
         composable("classroom") {
             ClassroomScreen(navController)
         }
+        // event
         composable("events") {
-            EventListScreen(viewModel = viewModel, navController = navController)
-        }
-        composable("semester") {
-            StudyMaterial(  navController)
+            EventListScreen(viewModel = eventViewModel, navController = navController)
         }
         composable("addEvent") {
-            AddEventScreen(viewModel = viewModel, navController = navController)
+            AddEventScreen(viewModel = eventViewModel, navController = navController)
         }
         composable(
             route = "eventDetails/{eventId}",
@@ -192,5 +144,3 @@ fun SplashScreen(navController: NavController) {
         CircularProgressIndicator()
     }
 }
-
-

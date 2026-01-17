@@ -326,7 +326,7 @@ fun DashboardGridSection(navController: NavHostController) {
             onClick = { navController.navigate("study_material") }
         ),
         Feature(
-            "Canteen",
+            "Courses",
             R.drawable.group_study,
             Color(0xFFFFD1D3),
             Color(0xFFFFB6B9),
