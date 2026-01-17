@@ -331,7 +331,7 @@ fun DashboardGridSection(navController: NavHostController) {
             Color(0xFFFFD1D3),
             Color(0xFFFFB6B9),
             Color(0xFFE59497),
-            onClick = { navController.navigate("canteen") }
+            onClick = { navController.navigate("courses") }
         ),
         Feature(
             "To-Do",

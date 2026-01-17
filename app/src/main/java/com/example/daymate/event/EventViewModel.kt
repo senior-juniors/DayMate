@@ -10,12 +10,23 @@ class EventViewModel : ViewModel() {
     val events = repository.events
 
     fun addEvent(event: Event, onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+        println("EventViewModel: addEvent called for event: ${event.title}")
         viewModelScope.launch {
-            val result = repository.addEvent(event)
-            if (result.isNotEmpty()) {
-                onSuccess(result)
-            } else {
-                onError("Failed to add event")
+            try {
+                println("EventViewModel: Calling repository.addEvent")
+                val result = repository.addEvent(event)
+                println("EventViewModel: Repository returned result: $result")
+                if (result.isNotEmpty()) {
+                    println("EventViewModel: Success - calling onSuccess callback")
+                    onSuccess(result)
+                } else {
+                    println("EventViewModel: Failed - empty result")
+                    onError("Failed to add event")
+                }
+            } catch (e: Exception) {
+                println("EventViewModel: Exception caught - ${e.message}")
+                e.printStackTrace()
+                onError("Exception: ${e.message}")
             }
         }
     }

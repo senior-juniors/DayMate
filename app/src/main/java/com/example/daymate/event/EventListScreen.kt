@@ -34,11 +34,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.example.daymate.admin.AdminManager
 
 @Composable
 fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
     val events by viewModel.events.collectAsState()
+    val context = LocalContext.current
+    val isAdmin = AdminManager.isAdmin(context)
 
     var showDeleteDialog by remember { mutableStateOf(false) }
     var eventToDelete by remember { mutableStateOf<Event?>(null) }
@@ -86,6 +90,7 @@ fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
                 items(events) { event ->
                     EventCard(
                         event = event,
+                        isAdmin = isAdmin,
                         onClick = {
                             navController.navigate("eventDetails/${event.id}")
                         },
@@ -97,6 +102,9 @@ fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
                 }
             }
         }
+
+        // Show FAB only for admin users
+        if (isAdmin) {
             FloatingActionButton(
                 onClick = { navController.navigate("addEvent") },
                 containerColor = buttonBlue,
@@ -108,6 +116,7 @@ fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
                 Icon(Icons.Default.Add, contentDescription = "Add Event")
             }
         }
+    }
 
         if (showDeleteDialog) {
             AlertDialog(
@@ -173,9 +182,9 @@ fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
     @Composable
     fun EventCard(
         event: Event,
-       // viewModel: EventViewModel, // Add ViewModel parameter
+        isAdmin: Boolean,
         onClick: () -> Unit,
-        onDelete: () -> Unit // Add delete callback
+        onDelete: () -> Unit
     ) {
         Card(
             modifier = Modifier
@@ -201,36 +210,35 @@ fun EventListScreen(viewModel: EventViewModel, navController: NavController) {
                 ) {
                     Text(
                         text = event.title,
-                        style = MaterialTheme.typography.titleLarge, // M3 typography
+                        style = MaterialTheme.typography.titleLarge,
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "${event.date} • ${event.time}",
-                        style = MaterialTheme.typography.bodyMedium, // M3 typography
+                        style = MaterialTheme.typography.bodyMedium,
                         color = Color.LightGray
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Organized by: ${event.organizer}",
-                        style = MaterialTheme.typography.bodyMedium, // M3 typography
+                        style = MaterialTheme.typography.bodyMedium,
                         color = Color.LightGray
                     )
                 }
 
-                // Delete button in top-right corner
-                IconButton(
-                    onClick = onDelete,
-//                    modifier = Modifier
-//                        .align(Alignment.TopEnd)
-//                        .padding(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Event",
-                        tint = Color.White.copy(alpha = 0.7f)
-                    )
+                // Show delete button only for admin users
+                if (isAdmin) {
+                    IconButton(
+                        onClick = onDelete
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Event",
+                            tint = Color.White.copy(alpha = 0.7f)
+                        )
+                    }
                 }
             }
         }

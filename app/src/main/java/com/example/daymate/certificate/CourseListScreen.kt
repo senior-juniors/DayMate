@@ -27,30 +27,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.daymate.admin.AdminManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseListScreen(viewModel: CourseViewModel, navController: NavController) {
     val courses by viewModel.courses.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val isAdmin = AdminManager.isAdmin(context)
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Free Certifications", fontWeight = FontWeight.Bold) }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Course")
+            // Show FAB only for admin users
+            if (isAdmin) {
+                FloatingActionButton(onClick = { showAddDialog = true }) {
+                    Icon(Icons.Filled.Add, contentDescription = "Add Course")
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
-        if (courses.isEmpty() && viewModel.courses.value == null) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else if (courses.isEmpty()) {
+        if (courses.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
                 Text("No courses available. Click + to add one!", style = MaterialTheme.typography.bodyLarge)
             }
@@ -61,10 +64,16 @@ fun CourseListScreen(viewModel: CourseViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(courses) { course ->
-                    // Updated to navigate when clicked
-                    CourseCard(course) {
-                        navController.navigate("course_detail/${course.id}")
-                    }
+                    CourseCard(
+                        course = course,
+                        isAdmin = isAdmin,
+                        onClick = {
+                            navController.navigate("course_detail/${course.id}")
+                        },
+                        onDelete = {
+                            viewModel.deleteCourse(course.id)
+                        }
+                    )
                 }
             }
         }
@@ -74,6 +83,7 @@ fun CourseListScreen(viewModel: CourseViewModel, navController: NavController) {
                 onDismiss = { showAddDialog = false },
                 onAddCourse = { title, description, provider, link, duration, certificateType ->
                     viewModel.addCourse(title, description, provider, link, duration, certificateType)
+                    android.widget.Toast.makeText(context, "Course added successfully!", android.widget.Toast.LENGTH_SHORT).show()
                     showAddDialog = false
                 }
             )

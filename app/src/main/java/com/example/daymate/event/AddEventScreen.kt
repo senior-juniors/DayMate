@@ -370,6 +370,8 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEventScreen(viewModel: EventViewModel, navController: NavController) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
@@ -528,6 +530,8 @@ fun AddEventScreen(viewModel: EventViewModel, navController: NavController) {
             // Styled Button
             Button(
                 onClick = {
+                    println("AddEventScreen: Add Event button clicked!")
+                    println("AddEventScreen: Event details - Title: $title, Date: $date, Time: $time")
                     val event = Event(
                         title = title,
                         description = description,
@@ -536,10 +540,18 @@ fun AddEventScreen(viewModel: EventViewModel, navController: NavController) {
                         location = location,
                         organizer = organizer
                     )
+                    println("AddEventScreen: Event object created: $event")
                     viewModel.addEvent(
                         event = event,
-                        onSuccess = { navController.popBackStack() },
-                        onError = { /* TODO: Handle error */ }
+                        onSuccess = {
+                            println("AddEventScreen: onSuccess callback called")
+                            android.widget.Toast.makeText(context, "Event added successfully!", android.widget.Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
+                        },
+                        onError = { error ->
+                            println("AddEventScreen: onError callback called with error: $error")
+                            android.widget.Toast.makeText(context, "Error: $error", android.widget.Toast.LENGTH_LONG).show()
+                        }
                     )
                 },
                 modifier = Modifier

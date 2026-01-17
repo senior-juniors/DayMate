@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,18 +41,22 @@ fun FirstPreview(){
     val navController= rememberNavController()
     DayMateFirstScreen(
         navController,
-        onGoogleSignInClick = TODO()
+        onGoogleSignInClick = {}
     )
 }
 
 @Composable
-fun DayMateFirstScreen(navController: NavController,
-                      onGoogleSignInClick: () -> Unit
+fun DayMateFirstScreen(
+    navController: NavController,
+    onGoogleSignInClick: () -> Unit
 ) {
+    // Note: TopAppBar should usually be wrapped in a Scaffold,
+    // but I'll focus on adding the Admin Icon Button below.
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A1A41)) // Dark Blue Background
+            .background(Color(0xFF0A1A41))
     ) {
         Column(
             modifier = Modifier
@@ -88,11 +95,10 @@ fun DayMateFirstScreen(navController: NavController,
                     .padding(bottom = 24.dp)
             )
 
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 100.dp, start = (16).dp) // Top and Left positioning
+                    .padding(top = 100.dp, start = (16).dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.firstpage_img),
@@ -104,43 +110,12 @@ fun DayMateFirstScreen(navController: NavController,
                 )
             }
 
-            // Login Button
-//            Button(
-//                onClick = {
-//                    navController.navigate("login")
-//
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(48.dp),
-//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9BA9FF)),
-//                shape = RoundedCornerShape(24.dp)
-//            ) {
-//                Text("Login", fontSize = 16.sp, color = Color.White)
-//            }
-
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            // Sign Up Button
-//            Button(
-//                onClick = {
-//                    navController.navigate("signup")
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(48.dp),
-//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9BA9FF)),
-//                shape = RoundedCornerShape(24.dp)
-//            ) {
-//                Text("Sign Up", fontSize = 16.sp, color = Color.White)
-//            }
-//
-//            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // OR Divider
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             ) {
                 Divider(
                     color = Color.LightGray,
@@ -148,9 +123,10 @@ fun DayMateFirstScreen(navController: NavController,
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = "  OR  ",
+                    text = "  CONTINUE WITH  ",
                     color = Color.White,
-                    fontSize = 14.sp
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
                 )
                 Divider(
                     color = Color.LightGray,
@@ -159,22 +135,40 @@ fun DayMateFirstScreen(navController: NavController,
                 )
             }
 
-            // Social Icons Row
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Social & Admin Icons Row
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = { onGoogleSignInClick()
-                }) {
+                // Google Login Button
+                IconButton(onClick = { onGoogleSignInClick() }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.google_logo), // Add this in your drawable
+                        painter = painterResource(id = R.drawable.google_logo),
                         contentDescription = "Google Login",
                         tint = Color.Unspecified,
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(24.dp))
+
+                Spacer(modifier = Modifier.width(32.dp))
+
+                // Admin Login Button
+                IconButton(onClick = {
+                    // Navigate to your admin login screen
+                    navController.navigate("admin_login")
+                }) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                           Icons.Default.Person,
+                            contentDescription = "Admin Login",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
             }
         }
     }
