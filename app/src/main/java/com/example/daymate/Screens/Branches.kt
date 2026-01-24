@@ -1,6 +1,7 @@
 package com.example.daymate.Screens
 
-
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,26 +30,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.daymate.Features.standardQuadFromTo
+
 
 @Composable
-fun StudyMaterial(navController: NavController) {
+fun Branches(navController: NavController, semesterName: String) {
+    val context = LocalContext.current // Used to launch the browser/Drive app
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF06154C)) // Base background color
+            .background(Color(0xFF06154C))
     ) {
-        // Wavy background drawing
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val width = constraints.maxWidth.toFloat()
             val height = constraints.maxHeight.toFloat()
 
@@ -92,25 +90,29 @@ fun StudyMaterial(navController: NavController) {
             }
         }
 
-        // Use LazyColumn for a scrollable list of cards
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(8) { index ->
-                val semesterLabel = "${index + 1} Semester" // Store the label in a variable
+            val branches = listOf("CSE", "ECE", "AIDE")
 
-                SemesterCard(
-                    text = semesterLabel,
-                    background = Color.White,
-                    textColor = Color.Black,
-                    mediumColor = Color(0xFF9FA4FF),
-                    lightColor = Color(0xFFAEB4FE),
-                    darkColor = Color(0xFF8F98FD),
+            items(branches.size) { index ->
+                val branchName = branches[index]
+
+                BranchesCard(
+                    text = branchName,
+                    lightColor = Color(0xFFCACFFF),
+                    mediumColor = Color(0xFF494E8A),
+                    darkColor = Color(0xFF2C316F),
                     onClick = {
-                        // FIX: Navigate to branches and pass the semester label
-                        navController.navigate("branches/$semesterLabel")
+                        // LOGIC: Get link from our DriveData object
+                        val folderUrl = DriveData.links[semesterName]?.get(branchName)
+
+                        if (folderUrl != null) {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(folderUrl))
+                            context.startActivity(intent)
+                        }
                     }
                 )
             }
@@ -119,7 +121,7 @@ fun StudyMaterial(navController: NavController) {
 }
 
 @Composable
-fun SemesterCard(
+fun BranchesCard(
     modifier: Modifier = Modifier,
     text: String,
     background: Color = Color.White,
@@ -131,15 +133,14 @@ fun SemesterCard(
 ) {
     Row(
         modifier = modifier
-            .clickable { onClick() }
             .fillMaxWidth()
             .height(100.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(background)
+            .clickable { onClick() } // Moved clickable after background for better ripple effect
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Wavy Background Section for the card icon
         BoxWithConstraints(
             modifier = Modifier
                 .padding(7.5.dp)
@@ -150,37 +151,35 @@ fun SemesterCard(
             val width = constraints.maxWidth.toFloat()
             val height = constraints.maxHeight.toFloat()
 
-            // Medium colored path
-            val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-            val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-            val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-            val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-            val mediumColoredPoint5 = Offset(width * 1.4f, -height)
-
             val mediumColoredPath = Path().apply {
-                moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-                standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-                standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-                standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-                standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
+                val p1 = Offset(0f, height * 0.3f)
+                val p2 = Offset(width * 0.1f, height * 0.35f)
+                val p3 = Offset(width * 0.4f, height * 0.05f)
+                val p4 = Offset(width * 0.75f, height * 0.7f)
+                val p5 = Offset(width * 1.4f, -height)
+
+                moveTo(p1.x, p1.y)
+                standardQuadFromTo(p1, p2)
+                standardQuadFromTo(p2, p3)
+                standardQuadFromTo(p3, p4)
+                standardQuadFromTo(p4, p5)
                 lineTo(width + 100f, height + 100f)
                 lineTo(-100f, height + 100f)
                 close()
             }
 
-            // Light colored path
-            val lightPoint1 = Offset(0f, height * 0.35f)
-            val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-            val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-            val lightPoint4 = Offset(width * 0.65f, height)
-            val lightPoint5 = Offset(width * 1.4f, -height / 3f)
-
             val lightColoredPath = Path().apply {
-                moveTo(lightPoint1.x, lightPoint1.y)
-                standardQuadFromTo(lightPoint1, lightPoint2)
-                standardQuadFromTo(lightPoint2, lightPoint3)
-                standardQuadFromTo(lightPoint3, lightPoint4)
-                standardQuadFromTo(lightPoint4, lightPoint5)
+                val p1 = Offset(0f, height * 0.35f)
+                val p2 = Offset(width * 0.1f, height * 0.4f)
+                val p3 = Offset(width * 0.3f, height * 0.35f)
+                val p4 = Offset(width * 0.65f, height)
+                val p5 = Offset(width * 1.4f, -height / 3f)
+
+                moveTo(p1.x, p1.y)
+                standardQuadFromTo(p1, p2)
+                standardQuadFromTo(p2, p3)
+                standardQuadFromTo(p3, p4)
+                standardQuadFromTo(p4, p5)
                 lineTo(width + 100f, height + 100f)
                 lineTo(-100f, height + 100f)
                 close()
@@ -190,39 +189,23 @@ fun SemesterCard(
                 drawPath(path = mediumColoredPath, color = mediumColor)
                 drawPath(path = lightColoredPath, color = lightColor)
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp)
-            )
         }
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Text
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(end = 8.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = text,
-                color = textColor,
-                style = MaterialTheme.typography.bodyLarge,
-                lineHeight = 20.sp,
-                fontSize = 20.sp
-            )
-        }
+        Text(
+            text = text,
+            color = textColor,
+            style = MaterialTheme.typography.bodyLarge,
+            fontSize = 20.sp
+        )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun StudyMaterialScreenPreview() {
-    MaterialTheme {
-        val navcontroller = rememberNavController()
-        StudyMaterial(navController = navcontroller)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BranchesScreenPreview() {
+//    MaterialTheme {
+//        val navcontroller = rememberNavController()
+//        Branches(navController = navcontroller)
+//    }
+//}

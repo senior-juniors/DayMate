@@ -20,6 +20,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.daymate.Screens.Branches
 import com.example.daymate.Screens.ClubConfirmScreen
 import com.example.daymate.Screens.ClubScreen
 import com.example.daymate.Screens.DashboardScreen
@@ -51,122 +52,212 @@ fun AppNavigation(navController: NavHostController) {
     val events by eventViewModel.events.collectAsState()
     val course by courseViewModel.courses.collectAsState()
 
-
     NavHost(
         navController = navController,
         startDestination = "splashScreen"
     ) {
+        // --- AUTH & MAIN SCREENS ---
         composable("FirstScreen") {
             val launchGoogleSignIn = rememberGoogleAuthLauncher(navController)
-            DayMateFirstScreen(
-                navController = navController,
-                onGoogleSignInClick = launchGoogleSignIn
-            )
+            DayMateFirstScreen(navController, onGoogleSignInClick = launchGoogleSignIn)
+        }
+        composable("login") { LoginScreen(navController) }
+        composable("signup") { SignUpScreen(navController) }
+        composable("admin_login") { AdminLoginScreen(navController) }
+        composable("splashScreen") { SplashScreen(navController) }
+        composable("dashboard") { DashboardScreen(navController, UserViewmodel()) }
+        composable("profileScreen") { ProfileScreen(navController) }
+
+        // --- STUDY MATERIAL FLOW ---
+        // 1. First Screen: Shows the 8 Semester cards
+        composable("study_material") {
+            StudyMaterial(navController = navController)
         }
 
-        composable("login") {
-            LoginScreen(navController)
+        // 2. Second Screen: Shows the 3 Branch cards (CSE, ECE, AIDE)
+        // This route captures the semester name (e.g., "1 Semester") as an argument
+        composable(
+            route = "branches/{semesterName}",
+            arguments = listOf(navArgument("semesterName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val semesterName = backStackEntry.arguments?.getString("semesterName") ?: ""
+            Branches(navController = navController, semesterName = semesterName)
         }
-        composable("signup") {
-            SignUpScreen(navController)
-        }
-        composable ("admin_login"){
-            AdminLoginScreen(navController)
-        }
+
+        // --- OTHER FEATURES ---
+        composable("userinfoScreen") { SemesterSelectionScreen(navController, UserViewmodel()) }
+        composable("classroom") { ClassroomScreen(navController) }
+        composable("courses") { CourseListScreen(courseViewModel, navController) }
+        composable("todo_screen") { ToDoScreen() }
+
         composable("course_detail/{courseId}") { backStackEntry ->
             val courseId = backStackEntry.arguments?.getString("courseId")
-            val course = course.find { it.id == courseId }
-            if (course != null) {
-                CourseDetailScreen(
-                   courseId = courseId,
-                    viewModel = courseViewModel,
-                    navController = navController
-                )
+            val selectedCourse = course.find { it.id == courseId }
+            if (selectedCourse != null) {
+                CourseDetailScreen(courseId ?: "", courseViewModel, navController)
             } else {
                 Text("Course not found")
             }
         }
 
-        composable("clubscreen") {
-            ClubScreen(navController, userViewmodel = UserViewmodel())
-        }
-        composable("clubconfirm") {
-            ClubConfirmScreen(navController)
-        }
-        composable("dashboard") {
-            DashboardScreen(navController, userViewModel = UserViewmodel())
-        }
-        composable("userinfoScreen") {
-            SemesterSelectionScreen(navController, userViewmodel = UserViewmodel())
-        }
-        composable("splashScreen") {
-            SplashScreen(navController)
-        }
-        composable("profileScreen") {
-            ProfileScreen(navController)
-        }
+        // --- CLUBS ---
+        composable("clubscreen") { ClubScreen(navController, UserViewmodel()) }
+        composable("clubconfirm") { ClubConfirmScreen(navController) }
 
-        composable("classroom") {
-            ClassroomScreen(navController)
-        }
-
-        composable("study_material") {
-            StudyMaterial(navController)
-        }
-
-       composable("courses") {
-            CourseListScreen(viewModel = courseViewModel, navController = navController)
-        }
-
-
-        // event
-        composable("events") {
-            EventListScreen(viewModel = eventViewModel, navController = navController)
-        }
-        composable("addEvent") {
-            AddEventScreen(viewModel = eventViewModel, navController = navController)
-        }
+        // --- EVENTS ---
+        composable("events") { EventListScreen(eventViewModel, navController) }
+        composable("addEvent") { AddEventScreen(eventViewModel, navController) }
         composable(
             route = "eventDetails/{eventId}",
             arguments = listOf(navArgument("eventId") { type = NavType.StringType })
         ) { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
             val event = events.find { it.id == eventId }
-
-            if (event != null) {
-                EventDetailsScreen(event = event)
-            } else {
-                Text("Event not found")
-            }
+            if (event != null) EventDetailsScreen(event = event) else Text("Event not found")
         }
-        composable("todo_screen") {
-            ToDoScreen()
-        }
-
-
     }
 }
 
 @Composable
 fun SplashScreen(navController: NavController) {
     val auth = FirebaseAuth.getInstance()
-
-    // Check if the user is already logged in
     LaunchedEffect(Unit) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // If the user is logged in, navigate directly to the Dashboard
-            navController.navigate("dashboard") {
-                popUpTo("splashScreen") { inclusive = true } // Remove Splash from the backstack
-            }
+            navController.navigate("dashboard") { popUpTo("splashScreen") { inclusive = true } }
         } else {
-            // If the user is not logged in, navigate to the signup screen
             navController.navigate("FirstScreen")
         }
     }
-
-    // Show loading or splash screen while checking login status
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun AppNavigation(navController: NavHostController) {
+//    val eventViewModel = viewModel<EventViewModel>()
+//    val courseViewModel = viewModel<CourseViewModel>()
+//    val events by eventViewModel.events.collectAsState()
+//    val course by courseViewModel.courses.collectAsState()
+//
+//
+//    NavHost(
+//        navController = navController,
+//        startDestination = "splashScreen"
+//    ) {
+//        composable("FirstScreen") {
+//            val launchGoogleSignIn = rememberGoogleAuthLauncher(navController)
+//            DayMateFirstScreen(
+//                navController = navController,
+//                onGoogleSignInClick = launchGoogleSignIn
+//            )
+//        }
+//
+//        composable("login") {
+//            LoginScreen(navController)
+//        }
+//        composable("signup") {
+//            SignUpScreen(navController)
+//        }
+//        composable ("admin_login"){
+//            AdminLoginScreen(navController)
+//        }
+//        composable("course_detail/{courseId}") { backStackEntry ->
+//            val courseId = backStackEntry.arguments?.getString("courseId")
+//            val course = course.find { it.id == courseId }
+//            if (course != null) {
+//                CourseDetailScreen(
+//                   courseId = courseId,
+//                    viewModel = courseViewModel,
+//                    navController = navController
+//                )
+//            } else {
+//                Text("Course not found")
+//            }
+//        }
+//
+//        composable("clubscreen") {
+//            ClubScreen(navController, userViewmodel = UserViewmodel())
+//        }
+//        composable("clubconfirm") {
+//            ClubConfirmScreen(navController)
+//        }
+//        composable("dashboard") {
+//            DashboardScreen(navController, userViewModel = UserViewmodel())
+//        }
+//        composable("userinfoScreen") {
+//            SemesterSelectionScreen(navController, userViewmodel = UserViewmodel())
+//        }
+//        composable("splashScreen") {
+//            SplashScreen(navController)
+//        }
+//        composable("profileScreen") {
+//            ProfileScreen(navController)
+//        }
+//
+//        composable("classroom") {
+//            ClassroomScreen(navController)
+//        }
+//
+//        composable("study_material") {
+//            StudyMaterial(navController)
+//        }
+//
+//       composable("courses") {
+//            CourseListScreen(viewModel = courseViewModel, navController = navController)
+//        }
+//
+//
+//        // event
+//        composable("events") {
+//            EventListScreen(viewModel = eventViewModel, navController = navController)
+//        }
+//        composable("addEvent") {
+//            AddEventScreen(viewModel = eventViewModel, navController = navController)
+//        }
+//        composable(
+//            route = "eventDetails/{eventId}",
+//            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val eventId = backStackEntry.arguments?.getString("eventId")
+//            val event = events.find { it.id == eventId }
+//
+//            if (event != null) {
+//                EventDetailsScreen(event = event)
+//            } else {
+//                Text("Event not found")
+//            }
+//        }
+//        composable("todo_screen") {
+//            ToDoScreen()
+//        }
+//
+//
+//    }
+//}
+//
+//@Composable
+//fun SplashScreen(navController: NavController) {
+//    val auth = FirebaseAuth.getInstance()
+//
+//    // Check if the user is already logged in
+//    LaunchedEffect(Unit) {
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            // If the user is logged in, navigate directly to the Dashboard
+//            navController.navigate("dashboard") {
+//                popUpTo("splashScreen") { inclusive = true } // Remove Splash from the backstack
+//            }
+//        } else {
+//            // If the user is not logged in, navigate to the signup screen
+//            navController.navigate("FirstScreen")
+//        }
+//    }
+//
+//    // Show loading or splash screen while checking login status
+//    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//        CircularProgressIndicator()
+//    }
+//}
