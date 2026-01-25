@@ -112,6 +112,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("com.airbnb.android:lottie-compose:6.1.0")
 
+
+
+        // DataStore Preferences
+        implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+        // Standard Lifecycle
+      //  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+
+
     // =================== Google Classroom API =======================
     // These are the libraries that were not importing correctly.
    // implementation("com.google.api-client:google-api-client-android:2.4.0")
