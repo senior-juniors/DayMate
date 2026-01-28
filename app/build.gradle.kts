@@ -138,6 +138,9 @@ dependencies {
     implementation("com.google.http-client:google-http-client-gson:1.44.2") { // Using a known stable version
         exclude(group = "com.google.guava", module = "guava-jdk5")
     }
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 

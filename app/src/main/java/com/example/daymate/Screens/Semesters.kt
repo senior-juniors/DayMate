@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,12 +31,57 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.daymate.Features.standardQuadFromTo
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Person
+import com.example.daymate.Features.AnimatedDropdownSelector
+import com.example.daymate.Features.PdfFile
+import com.example.daymate.Features.PdfItemCard
+import okhttp3.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.IOException
 
 @Composable
-fun StudyMaterial(navController: NavController) {
+fun StudyMaterialUnifiedScreen(navController: NavController) {
+    val context = LocalContext.current
+
+
+
+    val scriptUrl = "https://script.google.com/macros/s/AKfycbyqj8OvU3Eo7JkJWi9yj2VMSQdQ0QNutCxGqOjc4VudcnHQB6GB01fQmW37QNZtXxBI/exec" // Paste your Web App URL here
+
+    var selectedSemester by remember { mutableStateOf<String?>(null) }
+    var selectedBranch by remember { mutableStateOf<String?>(null) }
+    var selectedExamType by remember { mutableStateOf<String?>(null) }
+
+    var currentPdfList by remember { mutableStateOf<List<PdfFile>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(false) }
+
+    val semesters = (1..8).map { "$it Semester" }
+    val branches = listOf("CSE", "ECE", "AIDE")
+    val examTypes = listOf("Mid Sem", "End Sem")
+
+    // NEW: State to hold the URL to display below the button
+    var folderUrlToShow by remember { mutableStateOf<String?>(null) }
+
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,137 +135,102 @@ fun StudyMaterial(navController: NavController) {
             }
         }
 
-        // Use LazyColumn for a scrollable list of cards
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(8) { index ->
-                val semesterLabel = "${index + 1} Semester" // Store the label in a variable
-
-                SemesterCard(
-                    text = semesterLabel,
-                    background = Color.White,
-                    textColor = Color.Black,
-                    mediumColor = Color(0xFF9FA4FF),
-                    lightColor = Color(0xFFAEB4FE),
-                    darkColor = Color(0xFF8F98FD),
-                    onClick = {
-                        // FIX: Navigate to branches and pass the semester label
-                        navController.navigate("branches/$semesterLabel")
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SemesterCard(
-    modifier: Modifier = Modifier,
-    text: String,
-    background: Color = Color.White,
-    textColor: Color = Color.Black,
-    lightColor: Color,
-    mediumColor: Color,
-    darkColor: Color,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .clickable { onClick() }
-            .fillMaxWidth()
-            .height(100.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(background)
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Wavy Background Section for the card icon
-        BoxWithConstraints(
-            modifier = Modifier
-                .padding(7.5.dp)
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(10.dp))
-                .background(darkColor)
-        ) {
-            val width = constraints.maxWidth.toFloat()
-            val height = constraints.maxHeight.toFloat()
-
-            // Medium colored path
-            val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-            val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-            val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-            val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-            val mediumColoredPoint5 = Offset(width * 1.4f, -height)
-
-            val mediumColoredPath = Path().apply {
-                moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-                standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-                standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-                standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-                standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-                lineTo(width + 100f, height + 100f)
-                lineTo(-100f, height + 100f)
-                close()
-            }
-
-            // Light colored path
-            val lightPoint1 = Offset(0f, height * 0.35f)
-            val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-            val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-            val lightPoint4 = Offset(width * 0.65f, height)
-            val lightPoint5 = Offset(width * 1.4f, -height / 3f)
-
-            val lightColoredPath = Path().apply {
-                moveTo(lightPoint1.x, lightPoint1.y)
-                standardQuadFromTo(lightPoint1, lightPoint2)
-                standardQuadFromTo(lightPoint2, lightPoint3)
-                standardQuadFromTo(lightPoint3, lightPoint4)
-                standardQuadFromTo(lightPoint4, lightPoint5)
-                lineTo(width + 100f, height + 100f)
-                lineTo(-100f, height + 100f)
-                close()
-            }
-
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                drawPath(path = mediumColoredPath, color = mediumColor)
-                drawPath(path = lightColoredPath, color = lightColor)
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        // Text
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(end = 8.dp),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = text,
-                color = textColor,
-                style = MaterialTheme.typography.bodyLarge,
-                lineHeight = 20.sp,
-                fontSize = 20.sp
-            )
+            Spacer(modifier = Modifier.height(50.dp))
+            Text("Academic Materials", color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(25.dp))
+
+            AnimatedDropdownSelector("Select Semester", semesters, selectedSemester) { selectedSemester = it }
+            AnimatedDropdownSelector("Select Branch", branches, selectedBranch) { selectedBranch = it }
+            AnimatedDropdownSelector("Select Exam Type", examTypes, selectedExamType) { selectedExamType = it }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                // Inside the Button's onClick in StudyMaterialUnifiedScreen
+                onClick = {
+                    val semester = selectedSemester ?: ""
+                    val branch = selectedBranch ?: ""
+                    val exam = selectedExamType?.replace(" ", "") ?: ""
+                    val key = "${branch}_$exam"
+
+                    val folderUrl = DriveData.links[semester]?.get(key) ?: ""
+                    val folderId = folderUrl.split("/").last()
+
+                    if (folderId.isNotEmpty()) {
+                        navController.navigate("pdf_list/$folderId")
+                    }
+                },
+                enabled = selectedSemester != null && selectedBranch != null && selectedExamType != null && !isLoading,
+                modifier = Modifier.fillMaxWidth().height(55.dp),
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8F98FD))
+            ) {
+                if (isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                else Text("Get Material", fontWeight = FontWeight.Bold)
+            }
+
+            if (currentPdfList.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(30.dp))
+                currentPdfList.forEach { pdf ->
+                    PdfItemCard(pdf, context)
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
 
-@Preview(showBackground = true)
+
+fun fetchPdfList(scriptUrl: String, folderId: String, onResult: (List<PdfFile>) -> Unit) {
+    val client = OkHttpClient()
+
+    // Constructing the URL with the Folder ID as a parameter
+    val url = "$scriptUrl?id=$folderId"
+
+    val request = Request.Builder()
+        .url(url)
+        .build()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            // Log the error so you can see it in Logcat
+            e.printStackTrace()
+            onResult(emptyList())
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            response.body?.use { responseBody ->
+                val json = responseBody.string()
+                val gson = Gson()
+                val itemType = object : TypeToken<List<PdfFile>>() {}.type
+
+                try {
+                    val list: List<PdfFile> = gson.fromJson(json, itemType)
+                    // Ensure we return the result to the main thread for UI updates
+                    onResult(list)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    onResult(emptyList())
+                }
+            }
+        }
+    })
+}
+
+// --- PREVIEW SECTION ---
+
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun StudyMaterialScreenPreview() {
+fun StudyMaterialUnifiedPreview() {
+    // We use a dummy NavController for the preview
+    val navController = rememberNavController()
+
     MaterialTheme {
-        val navcontroller = rememberNavController()
-        StudyMaterial(navController = navcontroller)
+        StudyMaterialUnifiedScreen(navController = navController)
     }
 }
