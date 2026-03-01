@@ -340,6 +340,14 @@ fun DashboardGridSection(navController: NavHostController) {
             Color(0xFFB6C6FF),
             Color(0xFF9495E5),
             onClick = { navController.navigate("todo_screen") }
+        ),
+        Feature(
+            "CGPA Calculator",
+            R.drawable.group_study,
+            Color(0xFFD1EAFF),
+            Color(0xFFB6C6FF),
+            Color(0xFF9495E5),
+            onClick = { navController.navigate("cgpa") }
         )
     )
 

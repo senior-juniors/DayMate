@@ -36,6 +36,7 @@ import com.example.daymate.auth.rememberGoogleAuthLauncher
 import com.example.daymate.certificate.CourseDetailScreen
 import com.example.daymate.certificate.CourseListScreen
 import com.example.daymate.certificate.CourseViewModel
+import com.example.daymate.cg.CGPACalculator
 import com.example.daymate.classroom.ClassroomScreen
 import com.example.daymate.event.AddEventScreen
 import com.example.daymate.event.EventDetailsScreen
@@ -98,6 +99,9 @@ fun AppNavigation(navController: NavHostController) {
             } else {
                 Text("Course not found")
             }
+        }
+        composable("cgpa") {
+            CGPACalculator(navController)
         }
 
         // --- CLUBS ---
