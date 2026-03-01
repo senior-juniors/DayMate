@@ -20,16 +20,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.daymate.Screens.Branches
+
 import com.example.daymate.Screens.ClubConfirmScreen
 import com.example.daymate.Screens.ClubScreen
 import com.example.daymate.Screens.DashboardScreen
 import com.example.daymate.Screens.DayMateFirstScreen
 import com.example.daymate.Screens.LoginScreen
+import com.example.daymate.Screens.PdfListScreen
 import com.example.daymate.Screens.ProfileScreen
 import com.example.daymate.Screens.SemesterSelectionScreen
 import com.example.daymate.Screens.SignUpScreen
-import com.example.daymate.Screens.StudyMaterial
+
+import com.example.daymate.Screens.StudyMaterialUnifiedScreen
 import com.example.daymate.admin.AdminLoginScreen
 import com.example.daymate.auth.UserViewmodel
 import com.example.daymate.auth.rememberGoogleAuthLauncher
@@ -71,18 +73,18 @@ fun AppNavigation(navController: NavHostController) {
         // --- STUDY MATERIAL FLOW ---
         // 1. First Screen: Shows the 8 Semester cards
         composable("study_material") {
-            StudyMaterial(navController = navController)
+            StudyMaterialUnifiedScreen(navController = navController)
         }
 
         // 2. Second Screen: Shows the 3 Branch cards (CSE, ECE, AIDE)
         // This route captures the semester name (e.g., "1 Semester") as an argument
-        composable(
-            route = "branches/{semesterName}",
-            arguments = listOf(navArgument("semesterName") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val semesterName = backStackEntry.arguments?.getString("semesterName") ?: ""
-            Branches(navController = navController, semesterName = semesterName)
-        }
+//        composable(
+//            route = "branches/{semesterName}",
+//            arguments = listOf(navArgument("semesterName") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val semesterName = backStackEntry.arguments?.getString("semesterName") ?: ""
+//            Branches(navController = navController, semesterName = semesterName)
+//        }
 
         // --- OTHER FEATURES ---
         composable("userinfoScreen") { SemesterSelectionScreen(navController, UserViewmodel()) }
@@ -99,7 +101,13 @@ fun AppNavigation(navController: NavHostController) {
                 Text("Course not found")
             }
         }
-
+        composable(
+            route = "pdf_list/{folderId}",
+            arguments = listOf(navArgument("folderId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val folderId = backStackEntry.arguments?.getString("folderId") ?: ""
+            PdfListScreen(navController, folderId)
+        }
         // --- CLUBS ---
         composable("clubscreen") { ClubScreen(navController, UserViewmodel()) }
         composable("clubconfirm") { ClubConfirmScreen(navController) }
